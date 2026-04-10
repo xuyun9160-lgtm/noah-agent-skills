@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from typing import Any, Dict, List
 
+DETAIL_LIMIT = 10
+
 
 def _safe(v):
     return '-' if v is None else v
@@ -52,11 +54,14 @@ def format_market_state(summary_list: List[Dict[str, Any]]) -> str:
 def format_intraday(summary: Dict[str, Any], detail: bool = False) -> str:
     latest = summary.get('latest') or {}
     if detail and summary.get('items'):
+        shown = summary.get('items', [])[-DETAIL_LIMIT:]
         lines = [f'标的：{latest.get("name") or "-"}（{latest.get("code") or "-"}）', '分时明细：']
-        for i, x in enumerate(summary.get('items', []), 1):
+        for i, x in enumerate(shown, 1):
             lines.append(
                 f'{i}）{x.get("time") or x.get("data_time") or "-"}｜现价{_num(x.get("cur_price"))} / 均价{_num(x.get("avg_price"))} / 成交量{_num(x.get("volume"))}'
             )
+        if len(summary.get('items', [])) > DETAIL_LIMIT:
+            lines.append(f'说明：仅展示最近 {DETAIL_LIMIT} 条分时记录。')
         return '\n'.join(lines)
 
     lines = [
@@ -79,11 +84,14 @@ def format_intraday(summary: Dict[str, Any], detail: bool = False) -> str:
 def format_kline(summary: Dict[str, Any], detail: bool = False) -> str:
     latest = summary.get('latest') or {}
     if detail and summary.get('items'):
+        shown = summary.get('items', [])[-DETAIL_LIMIT:]
         lines = [f'标的：{latest.get("name") or "-"}（{latest.get("code") or "-"}）', 'K线明细：']
-        for i, x in enumerate(summary.get('items', []), 1):
+        for i, x in enumerate(shown, 1):
             lines.append(
                 f'{i}）{x.get("time_key") or "-"}｜开{_num(x.get("open"))} / 高{_num(x.get("high"))} / 低{_num(x.get("low"))} / 收{_num(x.get("close"))}'
             )
+        if len(summary.get('items', [])) > DETAIL_LIMIT:
+            lines.append(f'说明：仅展示最近 {DETAIL_LIMIT} 条K线记录。')
         if summary.get('highest') is not None or summary.get('lowest') is not None:
             lines.append(f'区间收盘高低：{_num(summary.get("highest"))} / {_num(summary.get("lowest"))}')
         return '\n'.join(lines)
@@ -133,8 +141,9 @@ def format_clarification(name: str, choices: list[dict]) -> str:
 def format_capital_flow(summary: Dict[str, Any], detail: bool = False) -> str:
     latest = summary.get('latest') or {}
     if detail and summary.get('items'):
+        shown = summary.get('items', [])[-DETAIL_LIMIT:]
         lines = ['资金流向（逐条）：']
-        for i, x in enumerate(summary.get('items', []), 1):
+        for i, x in enumerate(shown, 1):
             lines.extend([
                 f'{i}）净流入：{_num(x.get("in_flow"))}',
                 f'  - 特大单：{_num(x.get("super_in_flow"))}',
@@ -142,6 +151,8 @@ def format_capital_flow(summary: Dict[str, Any], detail: bool = False) -> str:
                 f'  - 中单：{_num(x.get("mid_in_flow"))}',
                 f'  - 小单：{_num(x.get("sml_in_flow"))}',
             ])
+        if len(summary.get('items', [])) > DETAIL_LIMIT:
+            lines.append(f'说明：仅展示最近 {DETAIL_LIMIT} 条资金流向记录。')
         if summary.get('has_trimmed_zero_tail'):
             lines.append('说明：已自动忽略尾部 0 值占位记录。')
         return '\n'.join(lines)
