@@ -4,7 +4,7 @@ import re
 import sys
 
 from run_query import run
-from normalize_symbol import normalize_symbol
+from normalize_symbol import normalize_symbol, AMBIGUOUS_NAME_HINTS
 
 
 def infer_intent(text: str) -> str:
@@ -26,21 +26,44 @@ def infer_intent(text: str) -> str:
     return 'snapshot'
 
 
-def infer_symbol(text: str) -> str:
+def detect_market(text: str):
+    if any(x in text for x in ['港股', '港市', 'HK-']) or re.search(r'\bHK\b', text.upper()):
+        return 'HK'
+    if any(x in text for x in ['美股', '美市', 'US-']) or re.search(r'\bUS\b', text.upper()):
+        return 'US'
+    return None
+
+
+def infer_symbol(text: str):
     candidates = re.findall(r'(HK-\d{5}|US-[A-Z][A-Z0-9.-]{0,9}|\b\d{5}\b|\b[A-Z]{1,5}\b)', text.upper())
     if candidates:
-        return normalize_symbol(candidates[0]) or candidates[0]
+        return {'symbol': normalize_symbol(candidates[0]) or candidates[0]}
 
-    name_candidates = ['腾讯控股', '腾讯', '阿里巴巴', '阿里', '苹果', '英伟达', '特斯拉']
+    market = detect_market(text)
+    for name in sorted(AMBIGUOUS_NAME_HINTS.keys(), key=len, reverse=True):
+        if name in text:
+            if market:
+                return {'symbol': AMBIGUOUS_NAME_HINTS[name][market]}
+            return {
+                'need_clarification': True,
+                'clarify_type': 'market',
+                'name': name,
+                'choices': [
+                    {'label': f'港股 {name}', 'symbol': AMBIGUOUS_NAME_HINTS[name]['HK']},
+                    {'label': f'美股 {name}', 'symbol': AMBIGUOUS_NAME_HINTS[name]['US']},
+                ],
+            }
+
+    name_candidates = ['腾讯控股', '腾讯', '苹果', '英伟达', '特斯拉']
     for name in sorted(name_candidates, key=len, reverse=True):
         if name in text:
-            return normalize_symbol(name) or name
+            return {'symbol': normalize_symbol(name) or name}
 
     cleaned = text
     for token in ['查询', '查一下', '查', '看看', '看一下', '看', '最近', '资金流向', '主力资金', '盘口', '市场状态', '基础信息', '日K', '周K', '月K', '分钟K', 'K线', '走势']:
         cleaned = cleaned.replace(token, ' ')
     cleaned = re.sub(r'\s+', ' ', cleaned).strip()
-    return normalize_symbol(cleaned) or cleaned
+    return {'symbol': normalize_symbol(cleaned) or cleaned}
 
 
 def infer_kwargs(text: str):
@@ -74,8 +97,20 @@ def infer_kwargs(text: str):
 
 def main(text: str):
     intent = infer_intent(text)
-    symbol = infer_symbol(text)
+    symbol_info = infer_symbol(text)
     kwargs = infer_kwargs(text)
+    if symbol_info.get('need_clarification'):
+        return {
+            'intent': intent,
+            'symbol': None,
+            'kwargs': kwargs,
+            'need_clarification': True,
+            'clarify_type': symbol_info.get('clarify_type'),
+            'name': symbol_info.get('name'),
+            'choices': symbol_info.get('choices', []),
+            'text': '该名称同时存在港股和美股，请先确认市场：' + ' / '.join([f"{x['label']}（{x['symbol']}）" for x in symbol_info.get('choices', [])]),
+        }
+    symbol = symbol_info.get('symbol')
     result = run(intent, symbol, **kwargs)
     return {
         'intent': intent,
