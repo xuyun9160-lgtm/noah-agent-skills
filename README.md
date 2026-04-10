@@ -99,8 +99,12 @@ NOAH_TRADE_GROUP_NO=100636524
 - `MODULES.md`
 - `INSTALL.md`
 - `noah-stock-market/SKILL.md`
+- `noah-stock-portfolio/SKILL.md`
+- `noah-stock-trade/SKILL.md`
 
-建议安装后先执行 smoke test，再进行自然语言查询验证。
+建议安装后：
+- market 模块先执行 smoke test，再进行自然语言查询验证
+- trade / portfolio 模块先确认 Base URL 与 `groupNo` 前提，再逐步接入查询能力
 
 ## Quick Examples
 
@@ -153,8 +157,23 @@ repo-root/
 3. 接入 `noah-stock-trade`
 4. 接入 `noah-stock-screener`
 
+## Documentation Map
+
+### Market
+- `noah-stock-market/SKILL.md`
+- `noah-stock-market/references/README.md`
+
+### Portfolio
+- `noah-stock-portfolio/SKILL.md`
+- `noah-stock-portfolio/references/README.md`
+
+### Trade
+- `noah-stock-trade/SKILL.md`
+- `noah-stock-trade/references/README.md`
+
 ## Notes
 
-- 当前一期只承诺港股 / 美股只读市场数据能力
+- 当前一期已成熟的是 market 模块；portfolio 与 trade 已完成较完整的文档与边界设计，脚本接入仍在后续阶段
+- 当前一期只承诺港股 / 美股只读市场数据能力；交易侧当前先聚焦只读查询与交易前评估
 - 不提供投资建议
-- 不应向最终用户暴露内部接口 URL、token 或脚本实现细节
+- 不应向最终用户暴露内部接口 URL、token、header 细节或脚本实现细节
