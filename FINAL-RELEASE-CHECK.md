@@ -15,7 +15,7 @@
 
 ## 4. 安装说明
 - [x] 已说明 Python 3 与 `requests`
-- [x] 已说明 `NOAH_API_BASE_URL` 与 `NOAH_MARKET_TOKEN`
+- [x] 已说明 `NOAH_API_BASE_URL` 与 `NOAH_MARKET_APIKEY`
 - [x] 已说明 smoke test 用法
 
 ## 5. 一期已验证能力

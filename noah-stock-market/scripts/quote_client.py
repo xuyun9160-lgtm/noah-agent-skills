@@ -32,12 +32,12 @@ load_env_file(SECRETS_FILE)
 class NoahQuoteClient:
     def __init__(self, base_url: Optional[str] = None, token: Optional[str] = None, timeout: int = 15):
         self.base_url = (base_url or os.getenv('NOAH_API_BASE_URL', '')).rstrip('/') + '/'
-        self.token = token or os.getenv('NOAH_MARKET_TOKEN', '')
+        self.token = token or os.getenv('NOAH_MARKET_APIKEY', '')
         self.timeout = timeout
         if not self.base_url:
             raise ValueError('NOAH_API_BASE_URL is missing')
         if not self.token:
-            raise ValueError('NOAH_MARKET_TOKEN is missing')
+            raise ValueError('NOAH_MARKET_APIKEY is missing')
         if requests is None:
             raise RuntimeError('requests is required')
 

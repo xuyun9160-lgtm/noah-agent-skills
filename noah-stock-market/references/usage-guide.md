@@ -6,7 +6,7 @@
 - Python 3
 - `requests` 依赖
 - `NOAH_API_BASE_URL`
-- `NOAH_MARKET_TOKEN`
+- `NOAH_MARKET_APIKEY`
 
 默认配置文件位置：
 - `<repo-or-workspace-root>/.secrets/noah-market.env`

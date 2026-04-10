@@ -14,7 +14,7 @@
 - `requests`
 - 公司证券行情服务可用的 API 配置：
   - `NOAH_API_BASE_URL`
-  - `NOAH_MARKET_TOKEN`
+  - `NOAH_MARKET_APIKEY`
 
 安装依赖：
 
@@ -36,7 +36,7 @@ pip install requests
 
 ```bash
 NOAH_API_BASE_URL=https://securities-open-api.t2.test.noahgrouptest.com
-NOAH_MARKET_TOKEN=your_token_here
+NOAH_MARKET_APIKEY=your_token_here
 ```
 
 ## Verify Installation

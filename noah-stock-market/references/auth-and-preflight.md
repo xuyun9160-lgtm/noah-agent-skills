@@ -10,14 +10,14 @@
 
 期望字段：
 - `NOAH_API_BASE_URL`
-- `NOAH_MARKET_TOKEN`
+- `NOAH_MARKET_APIKEY`
 
 不要把 token 写入 `SKILL.md` 或公开文档。
 
 ## Request Auth
 
 - 所有业务请求默认使用 Bearer Token：
-  - `Authorization: Bearer <NOAH_MARKET_TOKEN>`
+  - `Authorization: Bearer <NOAH_MARKET_APIKEY>`
 - base URL 使用：
   - `NOAH_API_BASE_URL`
 
@@ -25,7 +25,7 @@
 
 1. 确认 secrets 文件存在。
 2. 确认 `NOAH_API_BASE_URL` 非空。
-3. 确认 `NOAH_MARKET_TOKEN` 非空。
+3. 确认 `NOAH_MARKET_APIKEY` 非空。
 4. 若接口报 401/403，提示用户更新本地 token，而不是把 token 回显到聊天里。
 5. 可优先执行 `scripts/smoke_test.py` 验证快照、市场状态与 K 线链路是否可用。
 6. 单次查询优先走 `scripts/run_query.py`，避免每次重复手写接口调用逻辑。

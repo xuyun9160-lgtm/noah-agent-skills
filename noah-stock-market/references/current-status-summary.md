@@ -2,7 +2,7 @@
 
 ## What is already in place
 
-> 说明：该 skill 的可运行性依赖公司行情服务的 API token。没有 `NOAH_MARKET_TOKEN` 时，只能查看 skill 结构与文档，不能执行真实查询。
+> 说明：该 skill 的可运行性依赖公司行情服务的 API token。没有 `NOAH_MARKET_APIKEY` 时，只能查看 skill 结构与文档，不能执行真实查询。
 
 
 - `SKILL.md`：定义 skill 的触发边界、范围和执行规则
