@@ -30,10 +30,17 @@ def infer_symbol(text: str) -> str:
     candidates = re.findall(r'(HK-\d{5}|US-[A-Z][A-Z0-9.-]{0,9}|\b\d{5}\b|\b[A-Z]{1,5}\b)', text.upper())
     if candidates:
         return normalize_symbol(candidates[0]) or candidates[0]
-    for name in ['腾讯控股', '腾讯', '苹果', '英伟达', '特斯拉']:
+
+    name_candidates = ['腾讯控股', '腾讯', '阿里巴巴', '阿里', '苹果', '英伟达', '特斯拉']
+    for name in sorted(name_candidates, key=len, reverse=True):
         if name in text:
             return normalize_symbol(name) or name
-    return text.strip()
+
+    cleaned = text
+    for token in ['查询', '查一下', '查', '看看', '看一下', '看', '最近', '资金流向', '主力资金', '盘口', '市场状态', '基础信息', '日K', '周K', '月K', '分钟K', 'K线', '走势']:
+        cleaned = cleaned.replace(token, ' ')
+    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+    return normalize_symbol(cleaned) or cleaned
 
 
 def infer_kwargs(text: str):

@@ -8,6 +8,8 @@ US_PATTERN = re.compile(r'^(?:US[-.]?)?([A-Z][A-Z0-9.-]{0,9})$')
 NAME_HINTS = {
     '腾讯': 'HK-00700',
     '腾讯控股': 'HK-00700',
+    '阿里': 'HK-09988',
+    '阿里巴巴': 'HK-09988',
     'APPLE': 'US-AAPL',
     '苹果': 'US-AAPL',
     'NVIDIA': 'US-NVDA',
