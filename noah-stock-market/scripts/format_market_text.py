@@ -104,6 +104,14 @@ def format_orderbook(summary: Dict[str, Any]) -> str:
     return '\n'.join(lines)
 
 
+def format_clarification(name: str, choices: list[dict]) -> str:
+    lines = [f'“{name}”同时存在港股和美股，请先确认你要查哪个市场：']
+    for idx, item in enumerate(choices, 1):
+        lines.append(f'{idx}. {item.get("label")}（{item.get("symbol")}）')
+    lines.append('你直接回复“港股”或“美股”就行。')
+    return '\n'.join(lines)
+
+
 def format_capital_flow(summary: Dict[str, Any], detail: bool = False) -> str:
     latest = summary.get('latest') or {}
     if detail and summary.get('items'):

@@ -5,6 +5,7 @@ import sys
 
 from run_query import run
 from normalize_symbol import normalize_symbol, AMBIGUOUS_NAME_HINTS
+from format_market_text import format_clarification
 
 
 def infer_intent(text: str) -> str:
@@ -100,6 +101,7 @@ def main(text: str):
     symbol_info = infer_symbol(text)
     kwargs = infer_kwargs(text)
     if symbol_info.get('need_clarification'):
+        choices = symbol_info.get('choices', [])
         return {
             'intent': intent,
             'symbol': None,
@@ -107,8 +109,8 @@ def main(text: str):
             'need_clarification': True,
             'clarify_type': symbol_info.get('clarify_type'),
             'name': symbol_info.get('name'),
-            'choices': symbol_info.get('choices', []),
-            'text': '该名称同时存在港股和美股，请先确认市场：' + ' / '.join([f"{x['label']}（{x['symbol']}）" for x in symbol_info.get('choices', [])]),
+            'choices': choices,
+            'text': format_clarification(symbol_info.get('name'), choices),
         }
     symbol = symbol_info.get('symbol')
     result = run(intent, symbol, **kwargs)
