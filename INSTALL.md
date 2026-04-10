@@ -1,10 +1,10 @@
 # Install Noah Agent Skills
 
-`noah-stock-market` 是一个面向港股 / 美股市场数据查询的只读技能。适用于股票快照、市场状态、分时、K线、摆盘、资金流向、基础信息等查询场景。
+`noah-agent-skills` 是一个总技能仓库，当前已落地模块为 `noah-stock-market`。该模块面向港股 / 美股市场数据查询，适用于股票快照、市场状态、分时、K线、摆盘、资金流向、基础信息等查询场景。
 
-## Included Skill
+## Current Module
 
-| Skill | Description | Auth Required |
+| Module | Description | Auth Required |
 |---|---|:---:|
 | `noah-stock-market` | 港股 / 美股只读市场数据查询与结构化摘要 | Yes |
 

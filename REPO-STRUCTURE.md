@@ -6,6 +6,10 @@
 
 ```text
 repo-root/
+  SKILL.md
+  MODULES.md
+  ARCHITECTURE.md
+  INSTALL.md
   noah-stock-market/
     SKILL.md
     references/

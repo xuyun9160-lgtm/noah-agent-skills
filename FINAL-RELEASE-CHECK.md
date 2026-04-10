@@ -5,7 +5,7 @@
 - [x] 不应发布整个 workspace
 
 ## 2. 目录结构
-- [x] 根目录包含：`INSTALL.md`、`PUBLISHING-CHECKLIST.md`、`PUBLISHING-SUMMARY.md`、`REPO-STRUCTURE.md`
+- [x] 根目录包含：`SKILL.md`、`MODULES.md`、`ARCHITECTURE.md`、`INSTALL.md`、`PUBLISHING-CHECKLIST.md`、`PUBLISHING-SUMMARY.md`、`REPO-STRUCTURE.md`
 - [x] `noah-stock-market/` 包含：`SKILL.md`、`references/`、`scripts/`
 
 ## 3. 敏感信息

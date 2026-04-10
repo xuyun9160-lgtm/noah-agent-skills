@@ -4,10 +4,12 @@
 
 公开仓库中的阅读顺序建议：
 
-1. `INSTALL.md`
-2. `noah-stock-market/SKILL.md`
-3. `noah-stock-market/references/usage-guide.md`
-4. `noah-stock-market/references/known-limitations.md`
+1. `SKILL.md`（总 skill 入口）
+2. `MODULES.md`
+3. `INSTALL.md`
+4. `noah-stock-market/SKILL.md`
+5. `noah-stock-market/references/usage-guide.md`
+6. `noah-stock-market/references/known-limitations.md`
 
 ## What a public consumer should NOT need to know
 
