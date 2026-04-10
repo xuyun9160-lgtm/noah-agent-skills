@@ -81,18 +81,24 @@ def summarize_market_state(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     ]
 
 
-def summarize_kline(items: List[Dict[str, Any]]) -> Dict[str, Any]:
+def summarize_kline(items: List[Dict[str, Any]], detail: bool = False) -> Dict[str, Any]:
     if not items:
-        return {'count': 0, 'latest': None, 'highest': None, 'lowest': None}
+        return {'count': 0, 'latest': None, 'highest': None, 'lowest': None, 'items': []}
     closes = [x.get('close') for x in items if x.get('close') is not None]
-    latest = dict(items[0])
-    latest['code'] = normalize_symbol(latest.get('code'))
-    return {
-        'count': len(items),
+    normalized_items = []
+    for x in items:
+        row = dict(x)
+        row['code'] = normalize_symbol(row.get('code'))
+        normalized_items.append(row)
+    latest = normalized_items[0]
+    result = {
+        'count': len(normalized_items),
         'latest': latest,
         'highest': max(closes) if closes else None,
         'lowest': min(closes) if closes else None,
     }
+    result['items'] = normalized_items if detail else []
+    return result
 
 
 def summarize_intraday(items: List[Dict[str, Any]]) -> Dict[str, Any]:

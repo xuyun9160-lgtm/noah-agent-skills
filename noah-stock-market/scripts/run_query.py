@@ -105,9 +105,10 @@ def run(intent: str, raw_symbol: str, **kwargs) -> Dict[str, Any]:
         out['summary'] = summary
         out['text'] = format_intraday(summary)
     elif intent == 'kline' and isinstance(data, list):
-        summary = summarize_kline(data)
+        detail = str(kwargs.get('detail', 'false')).lower() in ('1','true','yes','y')
+        summary = summarize_kline(data, detail=detail)
         out['summary'] = summary
-        out['text'] = format_kline(summary)
+        out['text'] = format_kline(summary, detail=detail)
     elif intent == 'orderbook' and isinstance(data, dict):
         summary = summarize_orderbook(data)
         out['summary'] = summary

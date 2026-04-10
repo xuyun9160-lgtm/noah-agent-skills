@@ -68,8 +68,18 @@ def format_intraday(summary: Dict[str, Any]) -> str:
     return '\n'.join(lines)
 
 
-def format_kline(summary: Dict[str, Any]) -> str:
+def format_kline(summary: Dict[str, Any], detail: bool = False) -> str:
     latest = summary.get('latest') or {}
+    if detail and summary.get('items'):
+        lines = [f'标的：{latest.get("name") or "-"}（{latest.get("code") or "-"}）', 'K线明细：']
+        for i, x in enumerate(summary.get('items', []), 1):
+            lines.append(
+                f'{i}）{x.get("time_key") or "-"}｜开{_num(x.get("open"))} / 高{_num(x.get("high"))} / 低{_num(x.get("low"))} / 收{_num(x.get("close"))}'
+            )
+        if summary.get('highest') is not None or summary.get('lowest') is not None:
+            lines.append(f'区间收盘高低：{_num(summary.get("highest"))} / {_num(summary.get("lowest"))}')
+        return '\n'.join(lines)
+
     lines = [
         f'标的：{latest.get("name") or "-"}（{latest.get("code") or "-"}）',
         f'最新K线：开{_num(latest.get("open"))} / 高{_num(latest.get("high"))} / 低{_num(latest.get("low"))} / 收{_num(latest.get("close"))}',
