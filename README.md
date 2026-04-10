@@ -9,8 +9,8 @@
 | Module | Description | Auth Required | Status |
 |---|---|:---:|:---:|
 | `noah-stock-market` | 港股 / 美股市场数据查询（快照、K线、分时、摆盘、资金流向、基础信息） | Yes | Ready |
-| `noah-stock-portfolio` | 持仓、资产、盈亏、仓位分布 | Yes | Planned |
-| `noah-stock-trade` | 买入、卖出、下单、撤单、改单 | Yes | Planned |
+| `noah-stock-portfolio` | 账户、持仓、证券资产、资金流水（当前已完成文档与接入前提设计，脚本待接入） | Yes | Designing |
+| `noah-stock-trade` | 订单、成交、费用、可买可卖、交易前评估（当前先做只读交易能力，写操作暂不承诺） | Yes | Designing |
 | `noah-stock-screener` | 条件选股、财务筛选、技术筛选、形态筛选 | Yes | Planned |
 
 ## What This Repository Is
@@ -56,7 +56,8 @@
 
 ## Configuration
 
-安装后必须配置：
+### Market module
+安装 market 模块后必须配置：
 - `NOAH_API_BASE_URL`
 - `NOAH_MARKET_APIKEY`
 
@@ -74,6 +75,22 @@ NOAH_MARKET_APIKEY=your_api_key_here
 ```
 
 > 重要：这里必须使用**公司证券行情服务 API key**，不要使用 GitHub token、OpenClaw token 或其他平台凭证代替。
+
+### Trade / Portfolio modules
+当前测试口径下，交易与账户相关模块使用：
+- `NOAH_TRADE_API_BASE_URL`
+- `NOAH_TRADE_GROUP_NO`
+
+示例：
+
+```bash
+NOAH_TRADE_API_BASE_URL=https://stock-open-api.t2.test.noahgrouptest.com
+NOAH_TRADE_GROUP_NO=100636524
+```
+
+说明：
+- 当前交易侧先通过请求头中的 `groupNo` 访问账户分组
+- 当前测试口径下暂不需要单独 token
 
 ## Installation
 
