@@ -73,6 +73,8 @@ def infer_kwargs(text: str):
         kwargs['detail'] = 'true'
     if any(x in text for x in ['逐条', '明细', '列出来', '最近']) and any(x in text.lower() for x in ['日k', '周k', '月k', '分钟k', 'k线', '5分钟k', '15分钟k', '30分钟k', '60分钟k']):
         kwargs['detail'] = 'true'
+    if any(x in text for x in ['逐条', '明细', '列出来', '最近']) and any(x in text for x in ['分时', '走势']):
+        kwargs['detail'] = 'true'
     if '日k' in text.lower():
         kwargs['ktype'] = 'K_DAY'
     elif '周k' in text.lower():

@@ -101,19 +101,25 @@ def summarize_kline(items: List[Dict[str, Any]], detail: bool = False) -> Dict[s
     return result
 
 
-def summarize_intraday(items: List[Dict[str, Any]]) -> Dict[str, Any]:
+def summarize_intraday(items: List[Dict[str, Any]], detail: bool = False) -> Dict[str, Any]:
     if not items:
-        return {'count': 0, 'latest': None}
-    latest = dict(items[-1])
-    latest['code'] = normalize_symbol(latest.get('code'))
-    return {
-        'count': len(items),
+        return {'count': 0, 'latest': None, 'items': []}
+    normalized_items = []
+    for x in items:
+        row = dict(x)
+        row['code'] = normalize_symbol(row.get('code'))
+        normalized_items.append(row)
+    latest = normalized_items[-1]
+    result = {
+        'count': len(normalized_items),
         'latest': latest,
         'avg_price': latest.get('avg_price'),
         'last_close': latest.get('last_close'),
         'volume': latest.get('volume'),
         'turnover': latest.get('turnover'),
     }
+    result['items'] = normalized_items if detail else []
+    return result
 
 
 def summarize_orderbook(item: Dict[str, Any]) -> Dict[str, Any]:

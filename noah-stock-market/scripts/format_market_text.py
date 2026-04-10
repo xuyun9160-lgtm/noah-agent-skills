@@ -49,8 +49,16 @@ def format_market_state(summary_list: List[Dict[str, Any]]) -> str:
     return f'标的：{x.get("name") or "-"}（{x.get("symbol") or "-"}）\n当前状态：{x.get("market_state_text") or x.get("market_state")}'
 
 
-def format_intraday(summary: Dict[str, Any]) -> str:
+def format_intraday(summary: Dict[str, Any], detail: bool = False) -> str:
     latest = summary.get('latest') or {}
+    if detail and summary.get('items'):
+        lines = [f'标的：{latest.get("name") or "-"}（{latest.get("code") or "-"}）', '分时明细：']
+        for i, x in enumerate(summary.get('items', []), 1):
+            lines.append(
+                f'{i}）{x.get("time") or x.get("data_time") or "-"}｜现价{_num(x.get("cur_price"))} / 均价{_num(x.get("avg_price"))} / 成交量{_num(x.get("volume"))}'
+            )
+        return '\n'.join(lines)
+
     lines = [
         f'标的：{latest.get("name") or "-"}（{latest.get("code") or "-"}）',
         f'当前价：{_num(latest.get("cur_price"))}',

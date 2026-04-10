@@ -101,9 +101,10 @@ def run(intent: str, raw_symbol: str, **kwargs) -> Dict[str, Any]:
         out['summary'] = summary
         out['text'] = format_market_state(summary)
     elif intent == 'intraday' and isinstance(data, list):
-        summary = summarize_intraday(data)
+        detail = str(kwargs.get('detail', 'false')).lower() in ('1','true','yes','y')
+        summary = summarize_intraday(data, detail=detail)
         out['summary'] = summary
-        out['text'] = format_intraday(summary)
+        out['text'] = format_intraday(summary, detail=detail)
     elif intent == 'kline' and isinstance(data, list):
         detail = str(kwargs.get('detail', 'false')).lower() in ('1','true','yes','y')
         summary = summarize_kline(data, detail=detail)
