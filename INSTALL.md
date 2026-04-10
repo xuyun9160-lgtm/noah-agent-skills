@@ -24,7 +24,7 @@ pip install requests
 
 ## Configure API Access
 
-本 skill 依赖公司证券行情服务，安装后必须配置 API token，否则 skill 只能被加载，不能执行真实查询。
+本 skill 依赖公司证券行情服务，安装后必须配置 API key，否则 skill 只能被加载，不能执行真实查询。
 
 推荐配置文件：
 
@@ -36,8 +36,11 @@ pip install requests
 
 ```bash
 NOAH_API_BASE_URL=https://securities-open-api.t2.test.noahgrouptest.com
-NOAH_MARKET_APIKEY=your_token_here
+NOAH_MARKET_APIKEY=your_api_key_here
 ```
+
+> 重要：这里必须使用**公司证券行情服务的 API key**。
+> 不要使用 GitHub token、OpenClaw token 或其他平台凭证代替。
 
 ## Verify Installation
 

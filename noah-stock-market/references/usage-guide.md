@@ -11,7 +11,9 @@
 默认配置文件位置：
 - `<repo-or-workspace-root>/.secrets/noah-market.env`
 
-未配置 token 时，skill 虽然可以被加载，但无法执行真实行情查询。
+未配置 API key 时，skill 虽然可以被加载，但无法执行真实行情查询。
+
+> 注意：`NOAH_MARKET_APIKEY` 必须是公司证券行情服务的 API key，不能使用 GitHub token 或其他平台凭证替代。
 
 ## Recommended Entry Order
 

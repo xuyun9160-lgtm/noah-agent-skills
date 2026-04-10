@@ -26,10 +26,11 @@
 1. 确认 secrets 文件存在。
 2. 确认 `NOAH_API_BASE_URL` 非空。
 3. 确认 `NOAH_MARKET_APIKEY` 非空。
-4. 若接口报 401/403，提示用户更新本地 token，而不是把 token 回显到聊天里。
-5. 可优先执行 `scripts/smoke_test.py` 验证快照、市场状态与 K 线链路是否可用。
-6. 单次查询优先走 `scripts/run_query.py`，避免每次重复手写接口调用逻辑。
-7. 若后续改为动态换 token，再补 `/security/get_token` 的刷新逻辑。
+4. 确认该值是**公司证券行情服务的 API key**，而不是 GitHub token 或其他平台凭证。
+5. 若接口报 401/403，提示用户更新本地 API key，而不是把 key 回显到聊天里。
+6. 安装后优先执行 `scripts/smoke_test.py` 验证快照、市场状态与 K 线链路是否可用。
+7. 单次查询优先走 `scripts/run_query.py`，避免每次重复手写接口调用逻辑。
+8. 若后续改为动态换 token，再补 `/security/get_token` 的刷新逻辑。
 
 ## Error Handling
 
