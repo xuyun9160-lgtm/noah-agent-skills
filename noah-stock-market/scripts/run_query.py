@@ -113,9 +113,10 @@ def run(intent: str, raw_symbol: str, **kwargs) -> Dict[str, Any]:
         out['summary'] = summary
         out['text'] = format_orderbook(summary)
     elif intent == 'capital_flow' and isinstance(data, list):
-        summary = summarize_capital_flow(data)
+        detail = str(kwargs.get('detail', 'false')).lower() in ('1','true','yes','y')
+        summary = summarize_capital_flow(data, detail=detail)
         out['summary'] = summary
-        out['text'] = format_capital_flow(summary)
+        out['text'] = format_capital_flow(summary, detail=detail)
     elif intent == 'basicinfo' and isinstance(data, list):
         summary = summarize_basicinfo(data)
         out['summary'] = summary

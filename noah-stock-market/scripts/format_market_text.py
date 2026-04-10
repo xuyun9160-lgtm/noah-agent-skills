@@ -104,8 +104,22 @@ def format_orderbook(summary: Dict[str, Any]) -> str:
     return '\n'.join(lines)
 
 
-def format_capital_flow(summary: Dict[str, Any]) -> str:
+def format_capital_flow(summary: Dict[str, Any], detail: bool = False) -> str:
     latest = summary.get('latest') or {}
+    if detail and summary.get('items'):
+        lines = ['资金流向（逐条）：']
+        for i, x in enumerate(summary.get('items', []), 1):
+            lines.extend([
+                f'{i}）净流入：{_num(x.get("in_flow"))}',
+                f'  - 特大单：{_num(x.get("super_in_flow"))}',
+                f'  - 大单：{_num(x.get("big_in_flow"))}',
+                f'  - 中单：{_num(x.get("mid_in_flow"))}',
+                f'  - 小单：{_num(x.get("sml_in_flow"))}',
+            ])
+        if summary.get('has_trimmed_zero_tail'):
+            lines.append('说明：已自动忽略尾部 0 值占位记录。')
+        return '\n'.join(lines)
+
     lines = [
         '资金流向：',
         f'整体净流入：{_num(latest.get("in_flow"))}',
@@ -120,6 +134,8 @@ def format_capital_flow(summary: Dict[str, Any]) -> str:
             lines.append('观察：整体呈净流入。' if float(total) >= 0 else '观察：整体呈净流出。')
     except Exception:
         pass
+    if summary.get('has_trimmed_zero_tail'):
+        lines.append('说明：已自动忽略尾部 0 值占位记录。')
     return '\n'.join(lines)
 
 

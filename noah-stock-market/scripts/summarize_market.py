@@ -127,12 +127,24 @@ def summarize_orderbook(item: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def summarize_capital_flow(items: List[Dict[str, Any]]) -> Dict[str, Any]:
+def summarize_capital_flow(items: List[Dict[str, Any]], detail: bool = False) -> Dict[str, Any]:
     if not items:
-        return {'count': 0, 'latest': None}
-    latest = items[-1]
-    return {
-        'count': len(items),
+        return {'count': 0, 'latest': None, 'items': []}
+
+    def _is_zero_row(x: Dict[str, Any]) -> bool:
+        vals = [x.get('in_flow'), x.get('super_in_flow'), x.get('big_in_flow'), x.get('mid_in_flow'), x.get('sml_in_flow')]
+        cleaned = [0 if v is None else float(v) for v in vals]
+        return all(v == 0 for v in cleaned)
+
+    trimmed = list(items)
+    while trimmed and _is_zero_row(trimmed[-1]):
+        trimmed.pop()
+
+    effective = trimmed if trimmed else items
+    latest = effective[-1]
+    result = {
+        'count': len(effective),
+        'raw_count': len(items),
         'latest': {
             'in_flow': latest.get('in_flow'),
             'main_in_flow': latest.get('main_in_flow'),
@@ -143,7 +155,24 @@ def summarize_capital_flow(items: List[Dict[str, Any]]) -> Dict[str, Any]:
             'time': latest.get('capital_flow_item_time'),
             'last_valid_time': latest.get('last_valid_time'),
         },
+        'has_trimmed_zero_tail': len(effective) != len(items),
     }
+    if detail:
+        result['items'] = [
+            {
+                'in_flow': x.get('in_flow'),
+                'super_in_flow': x.get('super_in_flow'),
+                'big_in_flow': x.get('big_in_flow'),
+                'mid_in_flow': x.get('mid_in_flow'),
+                'sml_in_flow': x.get('sml_in_flow'),
+                'time': x.get('capital_flow_item_time'),
+                'last_valid_time': x.get('last_valid_time'),
+            }
+            for x in effective
+        ]
+    else:
+        result['items'] = []
+    return result
 
 
 def summarize_basicinfo(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:

@@ -38,6 +38,8 @@ def infer_symbol(text: str) -> str:
 
 def infer_kwargs(text: str):
     kwargs = {}
+    if any(x in text for x in ['逐条', '明细', '列出来', '最近']) and any(x in text for x in ['资金流向', '主力资金']):
+        kwargs['detail'] = 'true'
     if '日k' in text.lower():
         kwargs['ktype'] = 'K_DAY'
     elif '周k' in text.lower():
