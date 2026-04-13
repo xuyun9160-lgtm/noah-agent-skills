@@ -41,7 +41,12 @@ class NoahQuoteClient:
         if not self.base_url:
             raise ValueError('NOAH_API_BASE_URL is missing')
         if not self.token:
-            raise ValueError('NOAH_MARKET_APIKEY is missing. Please configure your securities market API key (not a GitHub token).')
+            raise ValueError(
+                '检测到未配置 NOAH_MARKET_APIKEY。请先创建或编辑 ~/.openclaw/.secrets/noah-market.env，并写入：\n'
+                'NOAH_MARKET_APIKEY=你的_market_token\n'
+                'NOAH_API_BASE_URL=https://securities-open-api.noahgroup.com\n'
+                '然后重新发起查询。'
+            )
         if requests is None:
             raise RuntimeError('requests is required')
 
