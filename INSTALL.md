@@ -35,10 +35,9 @@ pip install requests
 <repo-or-workspace-root>/.secrets/noah-market.env
 ```
 
-示例：
+当前市场服务 Base URL 已内置，安装后只需配置：
 
 ```bash
-NOAH_API_BASE_URL=https://securities-open-api.t2.test.noahgrouptest.com
 NOAH_MARKET_APIKEY=your_api_key_here
 ```
 
@@ -49,16 +48,32 @@ NOAH_MARKET_APIKEY=your_api_key_here
 <repo-or-workspace-root>/.secrets/noah-trade.env
 ```
 
-示例：
+当前交易服务 Base URL 已内置，安装后只需配置：
 
 ```bash
-NOAH_TRADE_API_BASE_URL=https://stock-open-api.t2.test.noahgrouptest.com
 NOAH_TRADE_GROUP_NO=100636524
 ```
 
 说明：
 - 当前交易侧通过请求头中的 `groupNo` 访问账户分组
 - 当前测试口径下暂不需要单独 token
+- 如需高级配置，可再补 `NOAH_TRADE_ENV`、`NOAH_TRADE_READ_ONLY`、`NOAH_TRADE_TIMEOUT`
+
+## One-click Install
+
+### Install from GitHub repository
+在仓库根目录执行：
+
+```bash
+bash install_openclaw_skills.sh
+```
+
+脚本会：
+- 将 `skills/noah-stock-market` 安装到 `~/.openclaw/skills/`
+- 将 `skills/noah-stock-trade` 安装到 `~/.openclaw/skills/`
+- 提示下一步需要配置 `NOAH_MARKET_APIKEY` 与 `NOAH_TRADE_GROUP_NO`
+
+> 如果你当前使用的是仓库源码目录而不是安装包，请先确保仓库根目录下存在 `skills/` 目录结构，或在发布包中执行该脚本。
 
 ## Verify Installation
 

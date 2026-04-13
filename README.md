@@ -69,8 +69,7 @@
 ## Configuration
 
 ### Market module
-安装 market 模块后必须配置：
-- `NOAH_API_BASE_URL`
+当前市场服务 Base URL 已内置。安装 market 模块后只需配置：
 - `NOAH_MARKET_APIKEY`
 
 推荐放在：
@@ -82,25 +81,23 @@
 示例：
 
 ```bash
-NOAH_API_BASE_URL=https://securities-open-api.t2.test.noahgrouptest.com
 NOAH_MARKET_APIKEY=your_api_key_here
 ```
 
 ### Trade module
-当前测试口径下，交易与账户相关能力使用：
-- `NOAH_TRADE_API_BASE_URL`
+当前交易服务 Base URL 已内置。安装 trade 模块后只需配置：
 - `NOAH_TRADE_GROUP_NO`
 
 示例：
 
 ```bash
-NOAH_TRADE_API_BASE_URL=https://stock-open-api.t2.test.noahgrouptest.com
 NOAH_TRADE_GROUP_NO=100636524
 ```
 
 说明：
 - 当前交易侧通过请求头中的 `groupNo` 访问账户分组
 - 当前测试口径下暂不需要单独 token
+- 如需高级配置，可再补 `NOAH_TRADE_ENV`、`NOAH_TRADE_READ_ONLY`、`NOAH_TRADE_TIMEOUT`
 
 ## Installation
 
