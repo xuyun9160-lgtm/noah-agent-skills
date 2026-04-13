@@ -9,6 +9,39 @@
 - `noah-stock-market` 负责市场数据、行情、K线、分时、摆盘、资金流向等能力
 - `noah-stock-trade` 负责账户、持仓、资产、资金流水、订单、成交、费用、可买可卖、交易前评估等能力
 
+## 一键安装（推荐）
+
+### 方式一：从 GitHub 仓库安装
+在仓库根目录执行：
+
+```bash
+bash install_openclaw_skills.sh
+```
+
+### 方式二：从安装包 zip 安装
+1. 下载并解压 `noah-agent-skills-installer.zip`
+2. 在安装包根目录执行：
+
+```bash
+bash install_openclaw_skills.sh
+```
+
+## 安装后只需配置
+
+### Market
+```bash
+NOAH_MARKET_APIKEY=your_api_key_here
+```
+
+### Trade
+```bash
+NOAH_TRADE_GROUP_NO=100636524
+```
+
+说明：
+- Market 与 Trade 的 Base URL 已内置，不需要用户手动配置
+- 更多安装与验证细节见 `INSTALL.md`
+
 ## Current Status
 
 | Module | Description | Auth Required | Status |
