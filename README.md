@@ -22,13 +22,13 @@
 优先从 GitHub 仓库拉取最新代码：`https://github.com/xuyun9160-lgtm/noah-agent-skills.git`；若用户提供的是安装包 zip，则下载并解压到临时目录。
 
 ## 步骤 2：安装 Skills
-在仓库根目录或安装包根目录执行：
+在 GitHub 仓库根目录或安装包根目录执行：
 
 bash install_openclaw_skills.sh
 
-脚本会自动安装以下 skill：
-- noah-stock-market
-- noah-stock-trade
+脚本会自动识别当前目录结构：
+- 如果是仓库结构，则安装根目录下的 `noah-stock-market` 和 `noah-stock-trade`
+- 如果是安装包结构，则安装 `skills/` 下的 `noah-stock-market` 和 `noah-stock-trade`
 
 ## 步骤 3：验证安装
 确认以下两个 skill 已可用：
