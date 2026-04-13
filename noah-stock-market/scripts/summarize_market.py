@@ -70,27 +70,40 @@ def summarize_snapshot(item: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def summarize_market_state(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    return [
-        {
-            'symbol': normalize_symbol(x.get('code')),
-            'name': x.get('stock_name') or x.get('name'),
-            'market_state': x.get('market_state'),
-            'market_state_text': MARKET_STATE_MAP.get(x.get('market_state'), x.get('market_state')),
-        }
-        for x in items
-    ]
+    out = []
+    for x in items:
+        code = x.get('code')
+        market = x.get('market')
+        symbol = normalize_symbol(code) if code else market
+        state = x.get('market_state')
+        out.append({
+            'symbol': symbol,
+            'name': x.get('stock_name') or x.get('name') or market,
+            'market_state': state,
+            'market_state_text': MARKET_STATE_MAP.get(state, state),
+            'trade_session': x.get('trade_session'),
+        })
+    return out
 
 
 def summarize_kline(items: List[Dict[str, Any]], detail: bool = False) -> Dict[str, Any]:
     if not items:
         return {'count': 0, 'latest': None, 'highest': None, 'lowest': None, 'items': []}
-    closes = [x.get('close') for x in items if x.get('close') is not None]
     normalized_items = []
+    closes = []
     for x in items:
         row = dict(x)
-        row['code'] = normalize_symbol(row.get('code'))
+        row['code'] = normalize_symbol(row.get('code') or row.get('uniqueCode'))
+        row['time_key'] = row.get('time_key') or row.get('tradeDateTime')
+        row['open'] = row.get('open', row.get('openPrice'))
+        row['high'] = row.get('high', row.get('highPrice'))
+        row['low'] = row.get('low', row.get('lowPrice'))
+        row['close'] = row.get('close', row.get('closePrice'))
+        row['volume'] = row.get('volume', row.get('tradeVol'))
+        row['turnover'] = row.get('turnover', row.get('turnover'))
+        closes.append(row.get('close')) if row.get('close') is not None else None
         normalized_items.append(row)
-    latest = normalized_items[0]
+    latest = normalized_items[-1]
     result = {
         'count': len(normalized_items),
         'latest': latest,
@@ -136,6 +149,75 @@ def summarize_orderbook(item: Dict[str, Any]) -> Dict[str, Any]:
         'ask_levels': len(ask),
         'recv_time_bid': item.get('svr_recv_time_bid'),
         'recv_time_ask': item.get('svr_recv_time_ask'),
+    }
+
+
+def summarize_ticker(items: List[Dict[str, Any]], detail: bool = False) -> Dict[str, Any]:
+    if not items:
+        return {'count': 0, 'latest': None, 'items': []}
+    normalized = []
+    for x in items:
+        row = dict(x)
+        row['code'] = normalize_symbol(row.get('code'))
+        normalized.append(row)
+    latest = normalized[0]
+    result = {'count': len(normalized), 'latest': latest}
+    result['items'] = normalized if detail else normalized[:10]
+    return result
+
+
+def summarize_broker_queue(item: Dict[str, Any]) -> Dict[str, Any]:
+    bid = item.get('bid_frame_table') or []
+    ask = item.get('ask_frame_table') or []
+    symbol = None
+    name = None
+    sample = bid[0] if bid else (ask[0] if ask else {})
+    if sample:
+        symbol = normalize_symbol(sample.get('code'))
+        name = sample.get('name')
+    return {
+        'symbol': symbol,
+        'name': name,
+        'bid_count': len(bid),
+        'ask_count': len(ask),
+        'bid_items': bid[:10],
+        'ask_items': ask[:10],
+    }
+
+
+def summarize_trading_days(items: List[Dict[str, Any]]) -> Dict[str, Any]:
+    trading = [x for x in items if x.get('is_trading_day')]
+    closed = [x for x in items if not x.get('is_trading_day')]
+    return {
+        'count': len(items),
+        'trading_days': len(trading),
+        'non_trading_days': len(closed),
+        'first': items[0] if items else None,
+        'last': items[-1] if items else None,
+        'items': items[:31],
+    }
+
+
+def summarize_us_analysis(item: Dict[str, Any]) -> Dict[str, Any]:
+    target = item.get('targetPricePrediction') or {}
+    rating = item.get('recommendedByUSStockAnalysts') or {}
+    return {
+        'target_price': {
+            'high': target.get('high'),
+            'mean': target.get('mean'),
+            'low': target.get('low'),
+            'last_price': target.get('lastPrice'),
+            'num_estimates': target.get('numOfEstimates'),
+        },
+        'rating': {
+            'average_rating': rating.get('averageRating'),
+            'average_rating_data': rating.get('averageRatingData'),
+            'analyst_count': rating.get('numberOfAnalystsOneWeekAgo'),
+            'one_week_ago': rating.get('oneWeekAgo') or {},
+            'one_month_ago': rating.get('oneMonthAgo') or {},
+            'two_month_ago': rating.get('twoMonthAgo') or {},
+            'three_month_ago': rating.get('threeMonthAgo') or {},
+        },
     }
 
 

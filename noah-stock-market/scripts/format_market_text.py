@@ -47,8 +47,13 @@ def format_snapshot(summary: Dict[str, Any]) -> str:
 def format_market_state(summary_list: List[Dict[str, Any]]) -> str:
     if not summary_list:
         return '暂无市场状态数据'
-    x = summary_list[0]
-    return f'标的：{x.get("name") or "-"}（{x.get("symbol") or "-"}）\n当前状态：{x.get("market_state_text") or x.get("market_state")}'
+    if len(summary_list) == 1:
+        x = summary_list[0]
+        return f'标的：{x.get("name") or "-"}（{x.get("symbol") or "-"}）\n当前状态：{x.get("market_state_text") or x.get("market_state")}'
+    lines = ['全局市场状态：']
+    for x in summary_list:
+        lines.append(f'- {x.get("name") or x.get("symbol") or "-"}：{x.get("market_state_text") or x.get("market_state") or "-"}')
+    return '\n'.join(lines)
 
 
 def format_intraday(summary: Dict[str, Any], detail: bool = False) -> str:
@@ -130,6 +135,47 @@ def format_orderbook(summary: Dict[str, Any]) -> str:
     return '\n'.join(lines)
 
 
+def format_ticker(summary: Dict[str, Any], detail: bool = False) -> str:
+    items = summary.get('items') or []
+    latest = summary.get('latest') or {}
+    if not items:
+        return '暂无逐笔成交数据'
+    lines = [f'标的：{latest.get("name") or "-"}（{latest.get("code") or "-"}）', f'逐笔成交：共 {summary.get("count") or 0} 条']
+    shown = items if detail else items[:10]
+    for i, x in enumerate(shown, 1):
+        lines.append(f'{i}）{x.get("time") or "-"}｜价格{_num(x.get("price"))}｜成交量{_num(x.get("volume"))}｜方向{x.get("ticker_direction") or "-"}')
+    return '\n'.join(lines)
+
+
+def format_broker_queue(summary: Dict[str, Any]) -> str:
+    lines = [
+        f'标的：{summary.get("name") or "-"}（{summary.get("symbol") or "-"}）',
+        f'经纪队列：买盘{_safe(summary.get("bid_count"))}条 / 卖盘{_safe(summary.get("ask_count"))}条',
+    ]
+    bid_items = summary.get('bid_items') or []
+    ask_items = summary.get('ask_items') or []
+    if bid_items:
+        lines.append('买盘前列：')
+        for x in bid_items[:5]:
+            lines.append(f'- {x.get("bid_broker_name") or x.get("bid_broker_id") or "-"}（位置{x.get("bid_broker_pos") or "-"}）')
+    if ask_items:
+        lines.append('卖盘前列：')
+        for x in ask_items[:5]:
+            lines.append(f'- {x.get("ask_broker_name") or x.get("ask_broker_id") or "-"}（位置{x.get("ask_broker_pos") or "-"}）')
+    return '\n'.join(lines)
+
+
+def format_trading_days(summary: Dict[str, Any]) -> str:
+    first = summary.get('first') or {}
+    last = summary.get('last') or {}
+    return '\n'.join([
+        '交易日历：',
+        f'区间起止：{first.get("date") or "-"} ~ {last.get("date") or "-"}',
+        f'交易日：{_safe(summary.get("trading_days"))} 天',
+        f'非交易日：{_safe(summary.get("non_trading_days"))} 天',
+    ])
+
+
 def format_clarification(name: str, choices: list[dict]) -> str:
     lines = [f'“{name}”同时存在港股和美股，请先确认你要查哪个市场：']
     for idx, item in enumerate(choices, 1):
@@ -186,3 +232,27 @@ def format_basicinfo(summary_list: List[Dict[str, Any]]) -> str:
         f'每手股数：{_safe(x.get("lot_size"))}',
         f'是否退市：{_safe(x.get("delisting"))}',
     ])
+
+
+def format_us_analysis(summary: Dict[str, Any]) -> str:
+    target = summary.get('target_price') or {}
+    rating = summary.get('rating') or {}
+    lines = [
+        '美股分析：',
+        f'分析师平均评级：{_safe(rating.get("average_rating"))}',
+        f'分析师数量：{_safe(rating.get("analyst_count"))}',
+        f'目标价区间：低 {_num(target.get("low"))} / 均 {_num(target.get("mean"))} / 高 {_num(target.get("high"))}',
+        f'最新价：{_num(target.get("last_price"))}',
+    ]
+    week = rating.get('one_week_ago') or {}
+    if week:
+        lines.append(
+            '近一周评级分布：强买入 {strongBuy} / 买入 {buy} / 持有 {hold} / 卖出 {sell} / 强卖出 {strongSell}'.format(
+                strongBuy=week.get('strongBuy', '-'),
+                buy=week.get('buy', '-'),
+                hold=week.get('hold', '-'),
+                sell=week.get('sell', '-'),
+                strongSell=week.get('strongSell', '-'),
+            )
+        )
+    return '\n'.join(lines)

@@ -12,7 +12,7 @@
 
 | Module | Description | Auth Required |
 |---|---|:---:|
-| `noah-stock-market` | 港股 / 美股只读市场数据查询与结构化摘要 | Yes |
+| `noah-stock-market` | 港股 / 美股只读市场数据查询与结构化摘要（含逐笔、经纪队列、交易日历、全局市场状态、美股分析） | Yes |
 | `noah-stock-trade` | 当前保留在仓库中继续完善，但本版本暂不作为默认安装项 | Yes |
 
 ## Requirements

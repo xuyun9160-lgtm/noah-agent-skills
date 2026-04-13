@@ -12,7 +12,10 @@ except ImportError:  # pragma: no cover
 
 
 WORKSPACE = Path(__file__).resolve().parents[3]
-SECRETS_FILE = WORKSPACE / '.secrets' / 'noah-market.env'
+SECRETS_FILES = [
+    WORKSPACE / '.secrets' / 'noah-market.env',
+    Path.home() / '.openclaw' / '.secrets' / 'noah-market.env',
+]
 
 
 def load_env_file(path: Path) -> None:
@@ -23,10 +26,11 @@ def load_env_file(path: Path) -> None:
         if not line or line.startswith('#') or '=' not in line:
             continue
         key, value = line.split('=', 1)
-        os.environ.setdefault(key.strip(), value.strip())
+        os.environ[key.strip()] = value.strip()
 
 
-load_env_file(SECRETS_FILE)
+for _env_file in SECRETS_FILES:
+    load_env_file(_env_file)
 
 
 class NoahQuoteClient:
