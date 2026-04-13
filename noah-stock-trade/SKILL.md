@@ -1,73 +1,147 @@
 ---
 name: noah-stock-trade
-description: 用于股票交易相关的订单、成交、可买可卖数量、预估费用、订单详情等场景。当用户询问下单前准备、订单状态、成交记录、订单费用、可买可卖数量、融资最大可买数量等问题时使用。当前一期先覆盖交易侧只读与交易前评估能力，不直接开放真实下单、改单、撤单。
+description: 用于股票交易相关的订单、成交、可买可卖数量、订单详情、订单费用、下单前费用预估，以及账户、持仓、证券资产、资金流水等场景。当用户询问今日订单、历史订单、今日成交、历史成交、订单状态、订单详情、费用明细、可买可卖数量、融资最大可买数量、账户信息、当前持仓、证券资产、资金流水、组合概览、交易前评估时使用。优先通过统一 CLI / 脚本入口执行查询与评估，不要让 agent 直接手拼交易接口。当前默认只开放只读查询与交易前评估；真实下单、改单、撤单属于高风险写操作，当前不对外承诺。
 ---
 
 # Noah Stock Trade
 
-交易查询与交易前评估模块。当前一期先做只读能力，不直接开放交易写操作。
+股票交易、账户与持仓查询 skill。默认把交易能力视为**高风险域**：先走统一脚本入口，先做只读，先做结构化错误，再考虑写操作。
 
-## Current Scope
+## Quick Start
 
-基于当前交易 OpenAPI，一期优先覆盖以下能力：
-- 获取证券可买可卖数量：`/trade/get_stock_amount`
-- 查询融资最大可买数量：`/trade/max_enable_buy_amt`
-- 获取当日订单列表：`/trade/get_order_list`
-- 获取未完成订单列表：`/trade/get_today_order_list`
-- 获取历史订单列表：`/trade/get_history_order_list`
-- 获取当日成交列表：`/trade/get_today_deal_list`
-- 获取历史成交列表：`/trade/get_history_deal_list`
-- 获取已完成订单列表：`/trade/get_finished_order_list`
-- 获取订单详情：`/trade/get_order_detail`
-- 获取订单费用详情：`/trade/get_order_fee_detail`
-- 查询下单预估费用：`/trade/order_fee_query`
-- 查询推送数据：`/trade/query_push_data`
+先读取：
+- `references/auth-and-preflight.md`
+- `references/current-availability.md`
 
-## Deferred Write Operations
+根据任务再按需读取：
+- 订单状态/成交状态解释 → `references/order-status-mapping.md`
+- 输出风格与用户态表达 → `references/output-policy.md`
+- 常见错误与排障 → `references/error-catalog.md`
+- 示例与调用习惯 → `references/usage-guide.md`
 
-以下写操作目前在 OpenAPI 中仍为 TEMP DISABLED，暂不纳入一期主承诺：
-- 提交下单：`/trade/place_order`
-- 修改订单：`/trade/modify_order`
-- 撤销订单：`/trade/cancel_order`
+## Runtime Rule
 
-## Installation / Prerequisites
+优先使用统一 CLI / 脚本入口，而不是直接在对话里拼接交易 OpenAPI。
 
-使用前至少需要：
-- Python 3
-- requests
-- `NOAH_TRADE_API_BASE_URL`
-- `NOAH_TRADE_GROUP_NO`
+推荐入口：
+- `python3 scripts/noah_trade_cli.py account-info`
+- `python3 scripts/noah_trade_cli.py positions`
+- `python3 scripts/noah_trade_cli.py sec-asset`
+- `python3 scripts/noah_trade_cli.py sec-capital-flow --start-date 20260401 --end-date 20260413`
+- `python3 scripts/noah_trade_cli.py today-orders`
+- `python3 scripts/noah_trade_cli.py today-deals`
+- `python3 scripts/noah_trade_cli.py order-detail --order-id <id>`
+- `python3 scripts/noah_trade_cli.py fee-estimate --symbol HK.00700 --side BUY --order-type LIMIT --price 320 --qty 100`
+- `python3 scripts/noah_trade_cli.py stock-amount --symbol HK.00700 --order-type LO`
 
-当前测试口径下：
-- 交易侧暂不需要单独 token
-- 通过请求头中的 `groupNo` 访问交易账户分组
+如果脚本返回 `ok=false`：
+1. 先向用户说明失败原因
+2. 优先使用结构化错误中的 `message` / `hint`
+3. 不要编造订单、成交、费用、账户、持仓或资产信息
+
+## Supported Scope
+
+当前优先支持：
+- 账户信息
+- 当前持仓
+- 证券资产
+- 证券资金流水
+- 今日订单（未完成订单优先）
+- 今日成交
+- 历史成交
+- 订单详情
+- 下单费用预估
+- 可买可卖数量
+
+可继续扩展但需以脚本实际接入情况为准：
+- 历史订单
+- 已完成订单
+- 融资最大可买数量
+- 订单费用详情
+- 推送数据查询
+- 真实下单 / 改单 / 撤单（后续）
 
 ## Routing Boundary
 
 适用于：
-- 可买可卖数量
-- 融资最大可买数量
-- 订单列表 / 历史订单
-- 当日成交 / 历史成交
-- 订单详情 / 订单费用
-- 下单预估费用
+- 账户信息 / 持仓 / 证券资产 / 资金流水
+- 订单列表 / 订单状态 / 订单详情
+- 成交列表 / 成交状态
+- 费用预估 / 费用详情
+- 可买可卖数量 / 最大可买数量
+- 交易前评估
 
 不适用于：
-- 行情数据查询（交给 market 模块）
-- 持仓 / 资产 / 资金流水 / 账户概览（交给 portfolio 模块）
-- 条件选股（交给 screener 模块）
-- 真实下单 / 撤单 / 改单（当前一期不开放）
+- 行情数据查询（交给 `noah-stock-market`）
+- 条件选股（交给 `noah-stock-screener`）
+- 主观投资建议
 
-## Risk / Confirmation Rule
+## Symbol Rule
 
-- 当前一期默认只读，不直接执行真实交易写操作
-- 若未来开放下单、改单、撤单，所有写操作必须确认
-- 若未明确市场、标的、数量、价格，不应代用户猜测
-- 若区分实盘 / 模拟盘，必须在交易前显式确认环境
+交易模块内部优先使用 `MARKET.CODE` 格式：
+- `HK.00700`
+- `US.AAPL`
 
-## Known Limitations
+如果用户输入的是：
+- `HK-00700`
+- `US-AAPL`
+- `00700`
+- 股票名称
 
-- 当前仍为文档骨架，脚本尚未正式接入这些接口
-- 证券代码格式使用 `MARKET.CODE`，例如 `HK.00700`、`US.AAPL`，后续需要做统一转换
-- 订单状态码体系较复杂，后续需要补统一状态映射与用户态解释
-- 写操作接口当前仍处于 TEMP DISABLED 状态，不应在一期对外承诺
+先做代码标准化，再进入交易脚本。
+若标的存在歧义，不要猜，先要求用户澄清市场或代码。
+
+## Output Rule
+
+默认输出顺序：
+1. 一句话结论
+2. 关键字段
+3. 状态解释
+4. 必要时补充错误原因或限制说明
+
+对用户展示时：
+- 优先说人话，不直接倾倒整个原始 JSON
+- 把订单状态、成交状态、方向、费用项翻译成人能看懂的话
+- 对空结果要明确说明“未查到”还是“接口失败”
+
+在开发/调试场景下，可以额外说明：
+- 使用了哪个 CLI 命令
+- 调用了哪个 endpoint
+- 返回了什么结构化错误
+
+## Risk Rule
+
+- 默认按只读模式处理
+- 当前不直接承诺真实下单、改单、撤单
+- 若未来开放写操作，必须：
+  1. 明确市场、标的、方向、价格、数量
+  2. 明确实盘/测试盘环境
+  3. 做二次确认
+  4. 防止重复提交
+
+## Preflight Checklist
+
+执行前至少确认：
+1. 已配置 `NOAH_TRADE_API_BASE_URL`
+2. 已配置 `NOAH_TRADE_GROUP_NO`
+3. `groupNo` 可访问目标交易账户分组
+4. 当前环境是测试还是正式已明确
+5. 当前任务是否属于只读查询或交易前评估
+
+若以上任一项不满足，先返回缺失项，不要继续假设可交易。
+
+## Implementation Direction
+
+本 skill 的实现原则：
+- Skill 负责路由和风险边界
+- `scripts/noah_trade_cli.py` 负责统一执行入口
+- `scripts/trade_client.py` / `scripts/portfolio_client.py` 负责 HTTP / header / 错误封装
+- 参数校验、symbol 转换、状态码映射尽量下沉到脚本层
+
+不要让 agent 在每次任务里重新发明交易接口调用逻辑。
+
+## Notes
+
+- 当前阶段以查询和评估为主，不以写操作为主承诺
+- 若 `references/current-availability.md` 与脚本实际能力不一致，以脚本真实可执行结果为准
+- 若用户提到“之前已经能调”，优先检查现有脚本和调用链路，而不是只看文档状态

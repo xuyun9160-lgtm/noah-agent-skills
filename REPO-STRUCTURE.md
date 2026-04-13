@@ -10,11 +10,30 @@ repo-root/
   MODULES.md
   ARCHITECTURE.md
   INSTALL.md
+  README.md
+  FINAL-STATUS.md
   noah-stock-market/
     SKILL.md
     references/
     scripts/
+  noah-stock-trade/
+    SKILL.md
+    references/
+    scripts/
+  archive/
+    noah-stock-portfolio/
+    noah-stock-screener/
 ```
+
+## Publishing Direction
+
+建议对外长期主结构收敛为：
+- `noah-stock-market`
+- `noah-stock-trade`
+
+其中：
+- `archive/noah-stock-portfolio/` 为已归档旧模块
+- `archive/noah-stock-screener/` 为已归档旧模块
 
 ## Current Development Layout
 
@@ -22,15 +41,17 @@ repo-root/
 
 ```text
 workspace-root/
-  noah-agent-skills/
+  export-noah-agent-skills/
     noah-stock-market/
+    noah-stock-trade/
+    archive/
 ```
 
 发布到 GitHub 时，建议让仓库根目录直接承载 skill 集合，而不是把整个 workspace 上传。
 
 ## Publishing Principle
 
-- 只发布 `noah-agent-skills/` 下的技能内容
+- 只发布 `export-noah-agent-skills/` 下的技能内容
 - 不发布 workspace 私有文件
 - 不发布本地 secrets
 - 不发布无关测试产物

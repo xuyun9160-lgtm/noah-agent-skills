@@ -4,21 +4,24 @@
 
 | Capability | Status | Notes |
 |---|---|---|
-| Stock Amount (Buy/Sell Availability) | Ready in OpenAPI / Not yet scripted | 已有 `/trade/get_stock_amount` 接口定义，但脚本尚未接入 |
-| Margin Max Buy Amount | Ready in OpenAPI / Not yet scripted | 已有 `/trade/max_enable_buy_amt` 接口定义，但脚本尚未接入 |
-| Today Order List | Ready in OpenAPI / Not yet scripted | 已有 `/trade/get_order_list` 接口定义，但脚本尚未接入 |
-| Unfinished Order List | Ready in OpenAPI / Not yet scripted | 已有 `/trade/get_today_order_list` 接口定义，但脚本尚未接入 |
-| History Order List | Ready in OpenAPI / Not yet scripted | 已有 `/trade/get_history_order_list` 接口定义，但脚本尚未接入 |
-| Today Deal List | Ready in OpenAPI / Not yet scripted | 已有 `/trade/get_today_deal_list` 接口定义，但脚本尚未接入 |
-| History Deal List | Ready in OpenAPI / Not yet scripted | 已有 `/trade/get_history_deal_list` 接口定义，但脚本尚未接入 |
-| Finished Order List | Ready in OpenAPI / Not yet scripted | 已有 `/trade/get_finished_order_list` 接口定义，但脚本尚未接入 |
-| Order Detail | Ready in OpenAPI / Not yet scripted | 已有 `/trade/get_order_detail` 接口定义，但脚本尚未接入 |
-| Order Fee Detail | Ready in OpenAPI / Not yet scripted | 已有 `/trade/get_order_fee_detail` 接口定义，但脚本尚未接入 |
-| Order Fee Query | Ready in OpenAPI / Not yet scripted | 已有 `/trade/order_fee_query` 接口定义，但脚本尚未接入 |
-| Push Data Query | Ready in OpenAPI / Not yet scripted | 已有 `/trade/query_push_data` 接口定义，但脚本尚未接入 |
-| Place Order | Deferred / TEMP DISABLED | 当前 OpenAPI 中仍为 TEMP DISABLED，不纳入一期主承诺 |
-| Modify Order | Deferred / TEMP DISABLED | 当前 OpenAPI 中仍为 TEMP DISABLED，不纳入一期主承诺 |
-| Cancel Order | Deferred / TEMP DISABLED | 当前 OpenAPI 中仍为 TEMP DISABLED，不纳入一期主承诺 |
+| Account Info | Scripted / Verified | 已并入 `noah-stock-trade`，CLI `account-info` 已联调成功 |
+| Positions | Scripted / Verified | 已并入 `noah-stock-trade`，CLI `positions` 已联调成功 |
+| Securities Asset | Scripted / Verified | 已并入 `noah-stock-trade`，CLI `sec-asset` 已联调成功 |
+| Securities Capital Flow | Scripted / Verified | 已并入 `noah-stock-trade`，CLI `sec-capital-flow` 已联调成功；需日期范围时更稳定 |
+| Stock Amount (Buy/Sell Availability) | Scripted / Verified | CLI `stock-amount` 已联调成功；需 `code` + `order_type` |
+| Margin Max Buy Amount | Scripted / Verified | CLI `max-enable-buy-amt` 已联调成功；需 `code` + `order_type` + `entrust_price` |
+| Today Deal List | Scripted / Verified | CLI `today-deals` 已联调成功 |
+| History Deal List | Scripted / Verified | CLI `history-deals` 已联调成功；需 `start_date` + `end_date` |
+| Today Unfinished Order List | Scripted / Verified | 对应 `/trade/get_today_order_list`，CLI `unfinished-orders` 已联调成功 |
+| Today Order List | Routed but inconsistent | `/trade/get_order_list` 当前测试环境返回与 OpenAPI 文档不一致 |
+| Finished Order List | Routed but inconsistent | `/trade/get_finished_order_list` 当前测试环境返回与 OpenAPI 文档不一致 |
+| Order Detail | Routed but server-side error | `/trade/get_order_detail` 当前传入测试参数会返回服务端 500 |
+| Order Fee Detail | Routed but server-side error | `/trade/get_order_fee_detail` 当前传入测试参数会返回服务端 500 |
+| Order Fee Query | Scripted / Verified | CLI `fee-estimate` 已联调成功；需 POST + JSON body |
+| Push Data Query | Ready in OpenAPI / Not yet scripted | 文档已定义，尚未正式接入 |
+| Place Order | Deferred / Not enabled | 当前阶段不对外承诺写操作 |
+| Modify Order | Deferred / Not enabled | 当前阶段不对外承诺写操作 |
+| Cancel Order | Deferred / Not enabled | 当前阶段不对外承诺写操作 |
 
 ## Access Prerequisites
 
@@ -32,11 +35,16 @@
 
 ## Notes
 
-- 当前状态中的“Ready in OpenAPI / Not yet scripted”表示：
-  - 接口已经存在于交易 OpenAPI 中
-  - 模块边界已明确
-  - 但本仓库中尚未完成对应脚本接入与用户态输出
-- 当前一期先聚焦只读交易查询与交易前评估能力。
-- 当前写操作（下单 / 改单 / 撤单）不应对外承诺。
+- 当前 `noah-stock-trade` 已吸收原 `noah-stock-portfolio` 的账户、持仓、资产、资金流水能力。
+- 当前状态中的 `Scripted / Verified` 表示：
+  - 脚本入口已存在
+  - 已在当前测试环境完成至少一轮实际联调
+- `Routed but inconsistent` 表示：
+  - OpenAPI 文档已有定义
+  - CLI / client 已接入
+  - 但当前测试环境返回行为与文档不一致
+- `Routed but server-side error` 表示：
+  - 路由和参数链路已打到目标接口
+  - 但当前测试环境返回服务端异常，仍需后端或接口实现侧确认
 - 交易模块使用的证券代码格式为 `MARKET.CODE`，例如 `HK.00700`、`US.AAPL`。
-- 后续需要补充与 market 模块代码格式（`HK-00700` / `US-AAPL`）之间的统一转换。
+- 后续可继续补充与 market 模块代码格式（`HK-00700` / `US-AAPL`）之间的统一展示转换。

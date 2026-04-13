@@ -1,20 +1,24 @@
 # Install Noah Agent Skills
 
-`noah-agent-skills` 是一个总技能仓库，当前已落地模块为 `noah-stock-market`。该模块面向港股 / 美股市场数据查询，适用于股票快照、市场状态、分时、K线、摆盘、资金流向、基础信息等查询场景。
+`noah-agent-skills` 当前正在收敛为两个主模块：
+- `noah-stock-market`
+- `noah-stock-trade`
 
-## Current Module
+其中：
+- `noah-stock-market` 面向港股 / 美股市场数据查询
+- `noah-stock-trade` 面向账户、持仓、资产、资金流水、订单、成交、费用与交易前评估
+
+## Current Modules
 
 | Module | Description | Auth Required |
 |---|---|:---:|
 | `noah-stock-market` | 港股 / 美股只读市场数据查询与结构化摘要 | Yes |
+| `noah-stock-trade` | 账户、持仓、证券资产、资金流水、成交、未完成订单、费用预估、可买可卖、最大可买 | Yes |
 
 ## Requirements
 
 - Python 3
 - `requests`
-- 公司证券行情服务可用的 API 配置：
-  - `NOAH_API_BASE_URL`
-  - `NOAH_MARKET_APIKEY`
 
 安装依赖：
 
@@ -24,8 +28,7 @@ pip install requests
 
 ## Configure API Access
 
-本 skill 依赖公司证券行情服务，安装后必须配置 API key，否则 skill 只能被加载，不能执行真实查询。
-
+### Market module
 推荐配置文件：
 
 ```text
@@ -39,11 +42,27 @@ NOAH_API_BASE_URL=https://securities-open-api.t2.test.noahgrouptest.com
 NOAH_MARKET_APIKEY=your_api_key_here
 ```
 
-> 重要：这里必须使用**公司证券行情服务的 API key**。
-> 不要使用 GitHub token、OpenClaw token 或其他平台凭证代替。
+### Trade module
+推荐配置文件：
+
+```text
+<repo-or-workspace-root>/.secrets/noah-trade.env
+```
+
+示例：
+
+```bash
+NOAH_TRADE_API_BASE_URL=https://stock-open-api.t2.test.noahgrouptest.com
+NOAH_TRADE_GROUP_NO=100636524
+```
+
+说明：
+- 当前交易侧通过请求头中的 `groupNo` 访问账户分组
+- 当前测试口径下暂不需要单独 token
 
 ## Verify Installation
 
+### Verify market
 在 `noah-stock-market/` 目录下运行：
 
 ```bash
@@ -51,25 +70,41 @@ python3 scripts/smoke_test.py
 python3 scripts/nl_smoke_test.py
 ```
 
-## Usage
-
-精准调用：
+### Verify trade
+在 `noah-stock-trade/` 目录下可优先运行：
 
 ```bash
-python3 scripts/run_query.py snapshot HK-00700
-python3 scripts/run_query.py kline HK-00700 num=10 ktype=K_DAY
-python3 scripts/run_query.py capital_flow HK-00700 num=5
+python3 scripts/noah_trade_cli.py account-info
+python3 scripts/noah_trade_cli.py positions
+python3 scripts/noah_trade_cli.py sec-asset
+python3 scripts/noah_trade_cli.py sec-capital-flow --start-date 20260401 --end-date 20260413
+python3 scripts/noah_trade_cli.py today-deals
+python3 scripts/noah_trade_cli.py history-deals --start-date 20260401 --end-date 20260413
+python3 scripts/noah_trade_cli.py fee-estimate --symbol HK.00700 --side BUY --order-type LIMIT --price 320 --qty 100
+python3 scripts/noah_trade_cli.py stock-amount --symbol HK.00700 --order-type LO
+python3 scripts/noah_trade_cli.py max-enable-buy-amt --symbol HK.00700 --order-type LO --entrust-price 320
 ```
 
-自然语言调用：
+## Usage
 
+### Market examples
 ```bash
-python3 scripts/route_query.py 看腾讯最近10根日K
-python3 scripts/route_query.py 看腾讯资金流向
+python3 noah-stock-market/scripts/run_query.py snapshot HK-00700
+python3 noah-stock-market/scripts/run_query.py kline HK-00700 num=10 ktype=K_DAY
+python3 noah-stock-market/scripts/run_query.py capital_flow HK-00700 num=5
+```
+
+### Trade examples
+```bash
+python3 noah-stock-trade/scripts/noah_trade_cli.py account-info
+python3 noah-stock-trade/scripts/noah_trade_cli.py positions
+python3 noah-stock-trade/scripts/noah_trade_cli.py unfinished-orders
+python3 noah-stock-trade/scripts/noah_trade_cli.py fee-estimate --symbol HK.00700 --side BUY --order-type LIMIT --price 320 --qty 100
 ```
 
 ## Current Notes
 
-- 当前港股主路径已验证较稳定
-- 美股 K 线仍需继续排查
-- 板块与期权能力当前环境不建议作为强承诺能力
+- 当前 `market` 模块已相对成熟
+- 当前 `trade` 模块主干能力已能联调成功，但部分订单详情类接口仍属于已知问题
+- 已知异常请查看：
+  - `noah-stock-trade/references/api-issues.md`
