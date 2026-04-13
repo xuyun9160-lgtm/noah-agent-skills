@@ -46,6 +46,12 @@ bash install_openclaw_skills.sh
 运行最小验证命令，确认 market 与 trade 可用。若缺 token 或 groupNo，则只提示缺失项；否则继续，不要说额外废话。
 ```
 
+安装脚本还会自动：
+- 创建 `~/.openclaw/.secrets/`
+- 生成配置模板（如不存在）
+- 保留已有配置
+- 检查 `NOAH_MARKET_APIKEY` 与 `NOAH_TRADE_GROUP_NO` 是否已填写
+
 更多安装与验证细节见 `INSTALL.md`。
 
 ## Current Status

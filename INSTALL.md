@@ -80,6 +80,12 @@ bash install_openclaw_skills.sh
 - 如果是仓库结构，则安装根目录下的 `noah-stock-market` 和 `noah-stock-trade`
 - 如果是安装包结构，则安装 `skills/` 下的 `noah-stock-market` 和 `noah-stock-trade`
 
+脚本还会自动：
+- 创建 `~/.openclaw/.secrets/`
+- 生成 `noah-market.env` 与 `noah-trade.env` 模板（若不存在）
+- 保留已有配置，不覆盖
+- 检查 `NOAH_MARKET_APIKEY` 与 `NOAH_TRADE_GROUP_NO` 是否已填写
+
 ## 步骤 3：验证安装
 确认以下两个 skill 已可用：
 - `noah-stock-market`
