@@ -3,11 +3,10 @@
 `noah-agent-skills` 是一个面向股票场景的综合金融 skill 仓库，当前正在收敛为两个主模块：
 
 - `noah-stock-market`
-- `noah-stock-trade`
 
 其中：
 - `noah-stock-market` 负责市场数据、行情、K线、分时、摆盘、资金流向等能力
-- `noah-stock-trade` 负责账户、持仓、资产、资金流水、订单、成交、费用、可买可卖、交易前评估等能力
+- `noah-stock-trade` 当前仍保留在仓库中继续完善，但本版本暂不作为默认安装项
 
 ## 一键安装（推荐）
 
@@ -27,8 +26,10 @@
 bash install_openclaw_skills.sh
 
 脚本会自动识别当前目录结构：
-- 如果是仓库结构，则安装根目录下的 `noah-stock-market` 和 `noah-stock-trade`
-- 如果是安装包结构，则安装 `skills/` 下的 `noah-stock-market` 和 `noah-stock-trade`
+- 如果是仓库结构，则安装根目录下的 `noah-stock-market`
+- 如果是安装包结构，则安装 `skills/` 下的 `noah-stock-market`
+
+当前版本暂不默认安装 `noah-stock-trade`。
 
 ## 步骤 3：验证安装
 确认以下两个 skill 已可用：
@@ -38,9 +39,8 @@ bash install_openclaw_skills.sh
 ## 步骤 4：检查配置
 如果缺少配置，只提示用户提供以下最少必要信息，不要要求用户提供其他信息：
 - `NOAH_MARKET_APIKEY`
-- `NOAH_TRADE_GROUP_NO`
 
-不要要求用户提供 Base URL。Market 与 Trade 的 Base URL 已内置。
+不要要求用户提供 Base URL。Market 的 Base URL 已内置为 `https://securities-open-api.noahgroup.com`。
 
 ## 步骤 5：完成验证
 运行最小验证命令，确认 market 与 trade 可用。若缺 token 或 groupNo，则只提示缺失项；否则继续，不要说额外废话。

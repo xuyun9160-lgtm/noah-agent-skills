@@ -31,7 +31,7 @@ load_env_file(SECRETS_FILE)
 
 class NoahQuoteClient:
     def __init__(self, base_url: Optional[str] = None, token: Optional[str] = None, timeout: int = 15):
-        self.base_url = (base_url or os.getenv('NOAH_API_BASE_URL', 'https://securities-open-api.t2.test.noahgrouptest.com')).rstrip('/') + '/'
+        self.base_url = (base_url or os.getenv('NOAH_API_BASE_URL', 'https://securities-open-api.noahgroup.com')).rstrip('/') + '/'
         self.token = token or os.getenv('NOAH_MARKET_APIKEY', '') or os.getenv('NOAH_MARKET_TOKEN', '')
         self.timeout = timeout
         if not self.base_url:

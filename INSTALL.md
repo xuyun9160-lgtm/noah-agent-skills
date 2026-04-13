@@ -13,7 +13,7 @@
 | Module | Description | Auth Required |
 |---|---|:---:|
 | `noah-stock-market` | 港股 / 美股只读市场数据查询与结构化摘要 | Yes |
-| `noah-stock-trade` | 账户、持仓、证券资产、资金流水、成交、未完成订单、费用预估、可买可卖、最大可买 | Yes |
+| `noah-stock-trade` | 当前保留在仓库中继续完善，但本版本暂不作为默认安装项 | Yes |
 
 ## Requirements
 
@@ -35,29 +35,25 @@ pip install requests
 <repo-or-workspace-root>/.secrets/noah-market.env
 ```
 
-当前市场服务 Base URL 已内置，安装后只需配置：
+当前市场服务 Base URL 已内置为：
+
+```bash
+https://securities-open-api.noahgroup.com
+```
+
+安装后只需配置：
 
 ```bash
 NOAH_MARKET_APIKEY=your_api_key_here
 ```
 
 ### Trade module
-推荐配置文件：
-
-```text
-<repo-or-workspace-root>/.secrets/noah-trade.env
-```
-
-当前交易服务 Base URL 已内置，安装后只需配置：
+当前 `noah-stock-trade` 仍保留在仓库中继续完善，但本版本暂不作为默认安装项。
+如后续需要单独启用 trade，再额外配置：
 
 ```bash
 NOAH_TRADE_GROUP_NO=100636524
 ```
-
-说明：
-- 当前交易侧通过请求头中的 `groupNo` 访问账户分组
-- 当前测试口径下暂不需要单独 token
-- 如需高级配置，可再补 `NOAH_TRADE_ENV`、`NOAH_TRADE_READ_ONLY`、`NOAH_TRADE_TIMEOUT`
 
 ## One-click Install
 
@@ -77,14 +73,16 @@ NOAH_TRADE_GROUP_NO=100636524
 bash install_openclaw_skills.sh
 
 脚本会自动识别当前目录结构：
-- 如果是仓库结构，则安装根目录下的 `noah-stock-market` 和 `noah-stock-trade`
-- 如果是安装包结构，则安装 `skills/` 下的 `noah-stock-market` 和 `noah-stock-trade`
+- 如果是仓库结构，则安装根目录下的 `noah-stock-market`
+- 如果是安装包结构，则安装 `skills/` 下的 `noah-stock-market`
+
+当前版本暂不默认安装 `noah-stock-trade`。
 
 脚本还会自动：
 - 创建 `~/.openclaw/.secrets/`
-- 生成 `noah-market.env` 与 `noah-trade.env` 模板（若不存在）
+- 生成 `noah-market.env` 模板（若不存在）
 - 保留已有配置，不覆盖
-- 检查 `NOAH_MARKET_APIKEY` 与 `NOAH_TRADE_GROUP_NO` 是否已填写
+- 检查 `NOAH_MARKET_APIKEY` 是否已填写
 
 ## 步骤 3：验证安装
 确认以下两个 skill 已可用：
