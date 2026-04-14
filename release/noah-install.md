@@ -76,6 +76,8 @@ Choose the setup method for your AI client.
 | OpenClaw | Download ZIP, extract, and run installer script | Global / workspace | < 2 min |
 | Claude Code CLI | Copy the skill folder into `~/.claude/skills/` | Global (all projects) | 2 min |
 | Cursor / VS Code / JetBrains (with Claude Extension) | Reuse `~/.claude/skills/` | Global (all projects) | 2 min |
+| Cursor (Built-in AI) | Copy `SKILL.md` into `~/.cursor/rules/` as a rule file | Global (all projects) | 2-3 min |
+| Claude Desktop / Claude.ai | Paste a condensed version into Custom Instructions | Global (all conversations) | 3 min |
 | AI tools that can read install guides | Send this guide or ZIP install instructions into the conversation | Depends on client | 1-3 min |
 
 ### Detailed Setup Steps
@@ -126,6 +128,41 @@ cp -R skills/noah-stock-market ~/.claude/skills/noah-stock-market
 ```
 
 After copying, start a new conversation or reopen the client so the skill can be discovered.
+
+</details>
+
+<details>
+<summary><b>Cursor (Built-in AI)</b> - Rules Directory</summary>
+
+Copy `SKILL.md` into the Cursor rules directory as a standalone rule file.
+
+```bash
+mkdir -p ~/.cursor/rules
+cp noah-stock-market/SKILL.md ~/.cursor/rules/noah-stock-market.md
+```
+
+If you are installing from the ZIP package:
+
+```bash
+unzip noah-agent-skills-installer.zip
+cd noah-agent-skills-installer
+mkdir -p ~/.cursor/rules
+cp skills/noah-stock-market/SKILL.md ~/.cursor/rules/noah-stock-market.md
+```
+
+After copying, reopen Cursor or start a new conversation so the rules can take effect.
+
+</details>
+
+<details>
+<summary><b>Claude Desktop / Claude.ai</b> - Custom Instructions</summary>
+
+Open the Custom Instructions settings and paste a condensed version of the Noah skill instructions.
+
+Recommended source:
+- `noah-stock-market/SKILL.md`
+
+If the full content is too long for the instruction box, keep the core capability summary and usage guidance.
 
 </details>
 
