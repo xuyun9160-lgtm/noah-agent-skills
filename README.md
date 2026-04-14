@@ -41,8 +41,8 @@ bash install_openclaw_skills.sh
 - `noah-stock-trade`
 
 ## 步骤 4：检查配置
-如果缺少配置，只提示用户提供以下最少必要信息，不要要求用户提供其他信息：
-- `NOAH_MARKET_APIKEY`
+当前版本默认内置 market API key，可直接体验 market 能力。
+如后续需要替换为客户自有凭证，再单独覆盖 `NOAH_MARKET_APIKEY` 即可。
 
 不要要求用户提供 Base URL。Market 的 Base URL 已内置为 `https://securities-open-api.noahgroup.com`。
 
@@ -118,16 +118,15 @@ bash install_openclaw_skills.sh
 ## Configuration
 
 ### Market module
-当前市场服务 Base URL 已内置。安装 market 模块后只需配置：
-- `NOAH_MARKET_APIKEY`
+当前市场服务 Base URL 已内置。本版本默认内置 market API key，安装后可直接体验 market 能力。
 
-推荐放在：
+推荐配置文件位置：
 
 ```text
 <repo-or-workspace-root>/.secrets/noah-market.env
 ```
 
-示例：
+如后续需要替换为客户自有凭证，可覆盖：
 
 ```bash
 NOAH_MARKET_APIKEY=your_api_key_here

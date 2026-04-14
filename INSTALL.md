@@ -41,7 +41,8 @@ pip install requests
 https://securities-open-api.noahgroup.com
 ```
 
-安装后只需配置：
+本版本默认内置 market API key，安装后可直接体验 market 能力。
+如后续需要切换为客户自有凭证，可覆盖：
 
 ```bash
 NOAH_MARKET_APIKEY=your_api_key_here
@@ -86,7 +87,7 @@ bash install_openclaw_skills.sh
 - 创建 `~/.openclaw/.secrets/`
 - 生成 `noah-market.env` 模板（若不存在）
 - 保留已有配置，不覆盖
-- 检查 `NOAH_MARKET_APIKEY` 是否已填写
+- 写入默认 market 配置（若不存在）
 
 ## 步骤 3：验证安装
 确认以下两个 skill 已可用：
@@ -94,9 +95,8 @@ bash install_openclaw_skills.sh
 - `noah-stock-trade`
 
 ## 步骤 4：检查配置
-如果缺少配置，只提示用户提供以下最少必要信息，不要要求用户提供其他信息：
-- `NOAH_MARKET_APIKEY`
-- `NOAH_TRADE_GROUP_NO`
+当前版本默认内置 market API key，可直接体验 market 能力。
+如需替换为客户自有凭证，再覆盖 `NOAH_MARKET_APIKEY`。
 
 不要要求用户提供 Base URL。Market 与 Trade 的 Base URL 已内置。
 

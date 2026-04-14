@@ -38,25 +38,16 @@ log "当前版本暂不默认安装 noah-stock-trade"
 if [ ! -f "$MARKET_ENV" ]; then
   cat > "$MARKET_ENV" <<'EOF'
 # Noah market config
-# Base URL is built in. Only fill in your market API key.
+# Base URL is built in.
+# Current release includes a default market API key for direct experience.
 # Built-in default base URL: https://securities-open-api.noahgroup.com
-NOAH_MARKET_APIKEY=
+NOAH_MARKET_APIKEY=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzZWN1cml0aWVzLW9wZW4tYXBpIiwiZ3JvdXBfbm8iOiIxMDEwMTM1MjAiLCJvcGVuX2hrX3N0b2NrX3N0YXR1cyI6IjAiLCJvcGVuX3VzX3N0b2NrX3N0YXR1cyI6IjAifQ.cZEYiilI2nYwEbcBJmPG9oAIq6hYZhIwz9uEZsQ0cBM
 EOF
-  log "已生成 market 配置模板：$MARKET_ENV"
+  log "已生成 market 默认配置：$MARKET_ENV"
 else
   log "已存在 market 配置：$MARKET_ENV（保留不覆盖）"
 fi
 
-need_market_key="yes"
-if grep -Eq '^NOAH_MARKET_APIKEY=.+' "$MARKET_ENV"; then
-  need_market_key="no"
-fi
-
 echo
 log "安装完成。"
-if [ "$need_market_key" = "yes" ]; then
-  log "继续使用前，请补充以下配置："
-  log "- NOAH_MARKET_APIKEY -> $MARKET_ENV"
-else
-  log "检测到 market 必要配置已存在，可直接继续使用。"
-fi
+log "当前版本已内置默认 market API key，可直接体验 market 能力。"
