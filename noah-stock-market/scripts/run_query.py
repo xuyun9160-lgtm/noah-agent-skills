@@ -5,15 +5,19 @@ from typing import Any, Dict
 
 from quote_client import NoahQuoteClient
 from normalize_symbol import normalize_symbol
+from protocol_enums import ensure_enum, normalize_sort_dir
 from summarize_market import (
     summarize_basicinfo,
     summarize_broker_queue,
     summarize_capital_flow,
     summarize_intraday,
+    summarize_ipo_list,
     summarize_kline,
     summarize_market_state,
     summarize_orderbook,
+    summarize_rank,
     summarize_snapshot,
+    summarize_stock_filter,
     summarize_ticker,
     summarize_trading_days,
     summarize_us_analysis,
@@ -23,10 +27,13 @@ from format_market_text import (
     format_broker_queue,
     format_capital_flow,
     format_intraday,
+    format_ipo_list,
     format_kline,
     format_market_state,
     format_orderbook,
+    format_rank,
     format_snapshot,
+    format_stock_filter,
     format_ticker,
     format_trading_days,
     format_us_analysis,
@@ -49,19 +56,21 @@ def build_params(intent: str, symbol: str, **kwargs) -> Dict[str, Any]:
     if intent == 'broker_queue':
         return {'code': symbol}
     if intent == 'kline':
+        ktype = ensure_enum('KLType', kwargs.get('ktype', 'K_DAY'))
+        autype = ensure_enum('AuType', kwargs.get('autype', 'NONE'))
         if kwargs.get('from') and kwargs.get('to'):
             return {
                 'code': symbol,
                 'from': kwargs.get('from'),
                 'to': kwargs.get('to'),
-                'ktype': kwargs.get('ktype', 'K_DAY'),
-                'autype': kwargs.get('autype', 'NONE'),
+                'ktype': ktype,
+                'autype': autype,
             }
         return {
             'code': symbol,
             'num': int(kwargs.get('num', 5)),
-            'ktype': kwargs.get('ktype', 'K_DAY'),
-            'autype': kwargs.get('autype', 'NONE'),
+            'ktype': ktype,
+            'autype': autype,
         }
     if intent == 'orderbook':
         return {'code': symbol, 'num': int(kwargs.get('num', 5))}
@@ -77,13 +86,44 @@ def build_params(intent: str, symbol: str, **kwargs) -> Dict[str, Any]:
         }
     if intent == 'us_analysis':
         return {'stock_code': symbol}
+    if intent == 'rank':
+        ascend = str(kwargs.get('ascend', 'false')).lower() in ('1', 'true', 'yes', 'y')
+        return {
+            'market_codes': ensure_enum('Markets', kwargs.get('market_codes') or kwargs.get('market') or symbol),
+            'rank_field': ensure_enum('QuoteSortField', kwargs.get('rank_field', 'raisePercent')),
+            'ascend': ascend,
+            'page': int(kwargs.get('page', 1)),
+            'page_size': int(kwargs.get('page_size', 10)),
+        }
+    if intent == 'ipo_list':
+        return {
+            'market': ensure_enum('Market', kwargs.get('market') or symbol),
+        }
+    if intent == 'stock_filter':
+        market = ensure_enum('Markets', kwargs.get('market') or symbol)
+        sort_field = ensure_enum('QuoteSortField', kwargs.get('sort_field', 'lastPrice'))
+        ascend = str(kwargs.get('ascend', 'false')).lower() in ('1', 'true', 'yes', 'y')
+        page = int(kwargs.get('page', 0))
+        page_size = int(kwargs.get('page_size', 10))
+        payload = {
+            'market': market,
+            'filter_list': kwargs.get('filter_list', []),
+            'sort_field': sort_field,
+            'ascend': ascend,
+            'page': page,
+            'page_size': page_size,
+        }
+        return payload
     raise ValueError(f'unsupported intent: {intent}')
 
 
 def run(intent: str, raw_symbol: str, **kwargs) -> Dict[str, Any]:
-    symbol = normalize_symbol(raw_symbol) or raw_symbol
+    if raw_symbol in {'HK', 'US', 'CN', 'ALL'}:
+        symbol = raw_symbol
+    else:
+        symbol = normalize_symbol(raw_symbol) or raw_symbol
     client = NoahQuoteClient()
-    supported = {'snapshot', 'market_state', 'global_state', 'intraday', 'ticker', 'broker_queue', 'kline', 'orderbook', 'capital_flow', 'basicinfo', 'trading_days', 'us_analysis'}
+    supported = {'snapshot', 'market_state', 'global_state', 'intraday', 'ticker', 'broker_queue', 'kline', 'orderbook', 'capital_flow', 'basicinfo', 'trading_days', 'us_analysis', 'rank', 'ipo_list', 'stock_filter'}
     if intent not in supported:
         return {'ok': False, 'message': f'unsupported intent: {intent}', 'symbol': symbol}
 
@@ -100,10 +140,16 @@ def run(intent: str, raw_symbol: str, **kwargs) -> Dict[str, Any]:
         'basicinfo': '/quote/get_stock_basicinfo',
         'trading_days': '/quote/request_trading_days',
         'us_analysis': '/infos/get_us_analysis',
+        'rank': '/rank/get_stock_rank',
+        'ipo_list': '/quote/get_ipo_list',
+        'stock_filter': '/quote/get_stock_filter',
     }
 
     params = build_params(intent, symbol, **kwargs)
-    result = client.get(path_map[intent], params)
+    if intent == 'stock_filter':
+        result = client.post(path_map[intent], params)
+    else:
+        result = client.get(path_map[intent], params)
     out = {
         'ok': result['ok'],
         'http_status': result['http_status'],
@@ -177,6 +223,18 @@ def run(intent: str, raw_symbol: str, **kwargs) -> Dict[str, Any]:
         summary = summarize_us_analysis(data)
         out['summary'] = summary
         out['text'] = format_us_analysis(summary)
+    elif intent == 'rank' and isinstance(data, list):
+        summary = summarize_rank(data, rank_field=params.get('rank_field'), ascend=params.get('ascend'))
+        out['summary'] = summary
+        out['text'] = format_rank(summary)
+    elif intent == 'ipo_list' and isinstance(data, list):
+        summary = summarize_ipo_list(data)
+        out['summary'] = summary
+        out['text'] = format_ipo_list(summary)
+    elif intent == 'stock_filter' and isinstance(data, list):
+        summary = summarize_stock_filter(data)
+        out['summary'] = summary
+        out['text'] = format_stock_filter(summary)
     else:
         out['text'] = '查询成功，但当前没有可展示的数据。'
     return out

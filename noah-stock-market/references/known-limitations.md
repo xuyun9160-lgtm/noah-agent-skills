@@ -5,13 +5,25 @@
 ## 已验证可用
 - `/quotes/get_market_snapshot`
 - `/infos/get_market_state`
-- `/quotes/get_cur_kline`
+- `/quote/get_global_state`
 - `/quotes/get_rt_data`
+- `/quotes/get_rt_ticker`
+- `/quotes/get_broker_queue`
+- `/quotes/get_cur_kline`
+- `/quotes/get_cur_kline_date`
 - `/quotes/get_order_book`
 - `/infos/get_capital_flow`
 - `/quote/get_stock_basicinfo`
+- `/quote/request_trading_days`
+- `/infos/get_us_analysis`
+- `/quote/get_ipo_list`
+- `/rank/get_stock_rank`
 
 ## 当前环境暂不支持或未验证通过
+- `/quote/get_stock_filter`
+  - 当前按 `entity.yaml#/components/schemas/StockFilterConfig` 严格构造请求后，仍未通过
+  - 现阶段按“暂不支持”处理，不对外暴露
+
 - `/quote/get_plate_list`
   - 返回：HTTP 200
   - 业务结果：`success=false`

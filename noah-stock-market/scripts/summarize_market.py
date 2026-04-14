@@ -2,6 +2,51 @@
 from typing import Any, Dict, List, Optional
 
 
+QUOTE_SORT_FIELD_LABELS = {
+    'CHANGE_RATE': '涨跌幅',
+    'CHANGE_VAL': '涨跌额',
+    'CUR_PRICE': '最新价',
+    'OPEN_PRICE': '今开',
+    'HIGH_PRICE': '最高价',
+    'LOW_PRICE': '最低价',
+    'LAST_CLOSE': '昨收',
+    'VOLUME': '成交量',
+    'TURNOVER': '成交额',
+    'TURNOVER_RATE': '换手率',
+    'AMPLITUDE': '振幅',
+    'VOLUME_RATIO': '量比',
+    'PE_TTM_RATIO': '市盈率(TTM)',
+    'PB_RATIO': '市净率',
+    'TOTAL_MARKET_VAL': '总市值',
+    'CIRC_MARKET_VAL': '流通市值',
+    'lastPrice': '最新价',
+    'raisePercent': '涨跌幅',
+    'raise': '涨跌额',
+    'exchange': '换手率',
+    'raiseSpeed': '涨速',
+    'mainNetInflow': '主力净流入',
+    'totalTradeVol': '成交量',
+    'totalTurnover': '成交额',
+    'volumeRatio': '量比',
+    'entrustRatio': '委比',
+    'amplitude': '振幅',
+    'highPrice': '最高价',
+    'lowPrice': '最低价',
+    'openPrice': '今开',
+    'preClose': '昨收',
+    'peDynamic': '动态市盈率',
+    'peRatio': '市盈率TTM',
+    'circulationValue': '流通市值',
+    'marketValue': '总市值',
+    'roe': 'ROE',
+    'raisePercentOneYear': '近一年涨幅',
+    'raisePercent1m': '近一月涨幅',
+    'raisePercentYtd': '年初至今涨幅',
+    'assetSize': '资产规模',
+    'shareIssued': '已发行份额',
+}
+
+
 MARKET_STATE_MAP = {
     'AUCTION': '盘前竞价',
     'WAITING_OPEN': '等待开盘',
@@ -109,6 +154,8 @@ def summarize_kline(items: List[Dict[str, Any]], detail: bool = False) -> Dict[s
         'latest': latest,
         'highest': max(closes) if closes else None,
         'lowest': min(closes) if closes else None,
+        'symbol': latest.get('code'),
+        'name': latest.get('name'),
     }
     result['items'] = normalized_items if detail else []
     return result
@@ -327,4 +374,64 @@ def summarize_option_chain(items: List[Dict[str, Any]]) -> Dict[str, Any]:
             }
             for x in items[:10]
         ],
+    }
+
+
+def summarize_rank(items: List[Dict[str, Any]], rank_field: Optional[str] = None, ascend: Optional[bool] = None) -> Dict[str, Any]:
+    normalized = []
+    for x in items:
+        symbol = normalize_symbol(x.get('code') or x.get('stock_code') or x.get('uniqueCode'))
+        normalized.append({
+            'symbol': symbol,
+            'name': x.get('name') or x.get('stock_name') or x.get('targetName'),
+            'last_price': x.get('last_price') or x.get('cur_price') or x.get('price') or x.get('lastPrice'),
+            'change_pct': x.get('change_rate') or x.get('change_pct') or x.get('raisePercent'),
+            'change_value': x.get('change_val') or x.get('change_value') or x.get('raise'),
+            'volume': x.get('volume') or x.get('totalTradeVol'),
+            'turnover': x.get('turnover') or x.get('totalTurnover'),
+            'raw': x,
+        })
+    return {
+        'count': len(normalized),
+        'rank_field': rank_field,
+        'rank_field_label': QUOTE_SORT_FIELD_LABELS.get(rank_field or '', rank_field),
+        'ascend': ascend,
+        'items': normalized[:20],
+    }
+
+
+def summarize_ipo_list(items: List[Dict[str, Any]]) -> Dict[str, Any]:
+    normalized = []
+    for x in items:
+        normalized.append({
+            'symbol': normalize_symbol(x.get('code') or x.get('stock_code')),
+            'name': x.get('name') or x.get('stock_name'),
+            'market': x.get('market'),
+            'listing_date': x.get('listing_date') or x.get('list_time') or x.get('ipo_date'),
+            'issue_price': x.get('issue_price') or x.get('price'),
+            'lot_size': x.get('lot_size'),
+            'raw': x,
+        })
+    return {
+        'count': len(normalized),
+        'items': normalized[:20],
+    }
+
+
+def summarize_stock_filter(items: List[Dict[str, Any]]) -> Dict[str, Any]:
+    normalized = []
+    for x in items:
+        normalized.append({
+            'symbol': normalize_symbol(x.get('code') or x.get('stock_code') or x.get('uniqueCode')),
+            'name': x.get('name') or x.get('stock_name'),
+            'last_price': x.get('cur_price') or x.get('last_price') or x.get('price'),
+            'change_pct': x.get('change_rate') or x.get('change_pct'),
+            'turnover': x.get('turnover'),
+            'volume': x.get('volume'),
+            'market_val': x.get('total_market_val') or x.get('market_val'),
+            'raw': x,
+        })
+    return {
+        'count': len(normalized),
+        'items': normalized[:20],
     }

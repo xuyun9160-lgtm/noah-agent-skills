@@ -88,9 +88,11 @@ def format_intraday(summary: Dict[str, Any], detail: bool = False) -> str:
 
 def format_kline(summary: Dict[str, Any], detail: bool = False) -> str:
     latest = summary.get('latest') or {}
+    title_name = latest.get('name') or summary.get('name') or '-'
+    title_code = latest.get('code') or summary.get('symbol') or '-'
     if detail and summary.get('items'):
         shown = summary.get('items', [])[-DETAIL_LIMIT:]
-        lines = [f'标的：{latest.get("name") or "-"}（{latest.get("code") or "-"}）', 'K线明细：']
+        lines = [f'标的：{title_name}（{title_code}）', 'K线明细：']
         for i, x in enumerate(shown, 1):
             lines.append(
                 f'{i}）{x.get("time_key") or "-"}｜开{_num(x.get("open"))} / 高{_num(x.get("high"))} / 低{_num(x.get("low"))} / 收{_num(x.get("close"))}'
@@ -102,7 +104,7 @@ def format_kline(summary: Dict[str, Any], detail: bool = False) -> str:
         return '\n'.join(lines)
 
     lines = [
-        f'标的：{latest.get("name") or "-"}（{latest.get("code") or "-"}）',
+        f'标的：{title_name}（{title_code}）',
         f'最新K线：开{_num(latest.get("open"))} / 高{_num(latest.get("high"))} / 低{_num(latest.get("low"))} / 收{_num(latest.get("close"))}',
         f'成交量/成交额：{_num(latest.get("volume"))} / {_num(latest.get("turnover"))}',
     ]
@@ -254,5 +256,43 @@ def format_us_analysis(summary: Dict[str, Any]) -> str:
                 sell=week.get('sell', '-'),
                 strongSell=week.get('strongSell', '-'),
             )
+        )
+    return '\n'.join(lines)
+
+
+def format_rank(summary: Dict[str, Any]) -> str:
+    items = summary.get('items') or []
+    if not items:
+        return '暂无排行榜数据'
+    field = summary.get('rank_field_label') or summary.get('rank_field') or '指标'
+    direction = '升序' if summary.get('ascend') else '降序'
+    lines = [f'排行榜：按{field}{direction}，共返回 {summary.get("count") or 0} 条']
+    for i, x in enumerate(items[:10], 1):
+        lines.append(
+            f'{i}）{x.get("name") or "-"}（{x.get("symbol") or "-"}）｜最新价{_num(x.get("last_price"))}｜涨跌幅{_num(x.get("change_pct"))}%'
+        )
+    return '\n'.join(lines)
+
+
+def format_ipo_list(summary: Dict[str, Any]) -> str:
+    items = summary.get('items') or []
+    if not items:
+        return '暂无 IPO 列表数据'
+    lines = [f'IPO 列表：共返回 {summary.get("count") or 0} 条']
+    for i, x in enumerate(items[:10], 1):
+        lines.append(
+            f'{i}）{x.get("name") or "-"}（{x.get("symbol") or "-"}）｜上市日期{_safe(x.get("listing_date"))}｜发行价{_num(x.get("issue_price"))}｜每手{_safe(x.get("lot_size"))}'
+        )
+    return '\n'.join(lines)
+
+
+def format_stock_filter(summary: Dict[str, Any]) -> str:
+    items = summary.get('items') or []
+    if not items:
+        return '条件选股无结果'
+    lines = [f'条件选股：共命中 {summary.get("count") or 0} 条']
+    for i, x in enumerate(items[:10], 1):
+        lines.append(
+            f'{i}）{x.get("name") or "-"}（{x.get("symbol") or "-"}）｜最新价{_num(x.get("last_price"))}｜涨跌幅{_num(x.get("change_pct"))}%｜成交额{_num(x.get("turnover"))}'
         )
     return '\n'.join(lines)

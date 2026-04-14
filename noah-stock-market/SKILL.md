@@ -85,6 +85,11 @@ NOAH_API_BASE_URL=https://securities-open-api.noahgroup.com
 
 优先通过 `scripts/run_query.py` 调用已验证能力：
 
+协议规则（重要）：
+- `references/openapi.yaml`、`references/enum.yaml`、`references/entity.yaml` 是本 skill 的协议源文件。
+- 凡是 openapi 参数声明为枚举引用（`enum.yaml#/...`），调用时必须从 `references/enum.yaml` 取值并校验，禁止按语义猜测枚举值。
+- 若协议源缺失、解析失败或传入值不在 enum 中，应直接报错，不要构造猜测参数继续请求。
+
 - `snapshot`
 - `market_state`
 - `global_state`
@@ -97,6 +102,9 @@ NOAH_API_BASE_URL=https://securities-open-api.noahgroup.com
 - `basicinfo`
 - `trading_days`
 - `us_analysis`
+- `rank`
+- `ipo_list`
+- `stock_filter`
 
 示例：
 
@@ -114,6 +122,9 @@ python3 scripts/run_query.py capital_flow HK-00700 num=5
 python3 scripts/run_query.py basicinfo HK-00700
 python3 scripts/run_query.py trading_days HK-00700 start=20260401 end=20260430
 python3 scripts/run_query.py us_analysis US-AAPL
+python3 scripts/run_query.py rank HK market_codes=HK rank_field=CHANGE_RATE page=1 page_size=10
+python3 scripts/run_query.py ipo_list HK market=HK
+python3 scripts/run_query.py stock_filter HK market=HK page=1 page_size=10 sort_field=CUR_PRICE
 ```
 
 如果脚本返回 `ok=false`，先直接向用户说明失败原因，不要编造数据。

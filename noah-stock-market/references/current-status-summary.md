@@ -18,14 +18,16 @@
 
 ## Verified One-Phase Capabilities
 
-- 港股：快照、市场状态、分时、K线、摆盘、资金流向、基础信息
+- 港股：快照、市场状态、全局市场状态、分时、逐笔、经纪队列、K线、时间区间 K 线、摆盘、资金流向、基础信息、交易日历、IPO 列表、排行榜
+- 美股：分析接口 `us_analysis` 已验证可用
 - 自然语言问法：腾讯相关主路径已基本可用
+- 枚举协议：已将 `openapi.yaml / enum.yaml / entity.yaml` 沉淀到 skill references，并开始按 enum 严格取值
 
 ## Not Yet Ready For Phase-1 Promise
 
+- 条件选股 `stock_filter`（当前环境暂不支持）
 - 板块
 - 期权链 / 到期日
-- 美股 K 线（当前环境 404）
 
 ## Recommended Next Step
 
