@@ -6,7 +6,7 @@ description: |
   capital flow, basic info, trading days, market/global state, IPO list, rank, and US analysis.
 metadata:
   author: noah
-  version: "1.2.0"
+  version: "1.2.3"
   last_updated: "2026-04-14"
 ---
 
@@ -35,7 +35,7 @@ Current Noah Skills focus on **Search / Market Query Skills**.
 | US Analysis | Query analyst / target-price style info | `Show AAPL analyst view` |
 
 > Current public release installs `noah-stock-market` by default.
-> `stock_filter` is currently not exposed in the active environment.
+> Finance HK/US and shareholder endpoints are present in the latest spec, but are still pending formal integration.
 
 ---
 
@@ -61,6 +61,7 @@ noah-agent-skills-installer/
 |   +-- noah-stock-market/
 +-- release/
 |   +-- noah-install.md
+|   +-- index.html
 +-- README.md
 +-- INSTALL.md
 +-- install_openclaw_skills.sh
@@ -85,7 +86,6 @@ Choose the setup method for your AI client. This main install document supports 
 ### Detailed Setup Steps
 
 > 本文档是对外唯一主安装文档。OpenClaw、Claude Code、Cursor、Claude Desktop / Claude.ai 的安装方式统一收口在这里。
-
 
 <details>
 <summary><b>OpenClaw</b> - ZIP install</summary>
@@ -133,6 +133,8 @@ mkdir -p ~/.claude/skills
 cp -R search-skills/noah-stock-market ~/.claude/skills/noah-stock-market
 ```
 
+Because the current release includes a built-in default market key fallback, these clients can work even when they do not execute the OpenClaw installer script.
+
 After copying, start a new conversation or reopen the client so the skill can be discovered.
 
 </details>
@@ -156,6 +158,8 @@ mkdir -p ~/.cursor/rules
 cp search-skills/noah-stock-market/SKILL.md ~/.cursor/rules/noah-stock-market.md
 ```
 
+The current release includes a built-in default market key fallback, so Cursor built-in AI can still use market queries without running the installer script first.
+
 After copying, reopen Cursor or start a new conversation so the rules can take effect.
 
 </details>
@@ -173,7 +177,7 @@ If the instruction box has strict limits, keep the capability summary, scope lim
 
 ## Verify Installation
 
-Current release includes a built-in market API key for direct experience. After installation, you can verify immediately with:
+Current release includes a built-in market API key fallback for direct experience. After installation, you can verify immediately with:
 
 ```bash
 python3 noah-stock-market/scripts/run_query.py snapshot HK-00700
@@ -189,7 +193,7 @@ If these commands return data successfully, the installation is ready.
 
 - The market Base URL is built in:
   `https://securities-open-api.noahgroup.com`
-- Current release includes a default market API key for direct experience.
+- Current release includes a built-in default market API key fallback for direct experience.
 - Current release installs `noah-stock-market` by default.
 - `noah-stock-trade` remains in the repository for ongoing development, but is not the default install target in this release.
 - All OpenAPI enum parameters must be taken from `enum.yaml`, not guessed semantically.
@@ -202,6 +206,13 @@ If these commands return data successfully, the installation is ready.
 <summary><b>The conversation says it can't find Noah capabilities</b></summary>
 
 Some clients require starting a new conversation or reloading skills after installation. If needed, start a fresh session and retry.
+
+</details>
+
+<details>
+<summary><b>The skill is visible, but market queries still fail</b></summary>
+
+Check whether the client has reloaded rules / skills. In the current release, the built-in default market key fallback is enabled, so non-installer clients such as Cursor or Claude Code should also be able to run basic market queries.
 
 </details>
 
