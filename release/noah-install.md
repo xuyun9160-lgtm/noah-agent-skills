@@ -138,7 +138,7 @@ Copy `SKILL.md` into the Cursor rules directory as a standalone rule file.
 
 ```bash
 mkdir -p ~/.cursor/rules
-cp noah-stock-market/SKILL.md ~/.cursor/rules/noah-stock-market.md
+cp release/noah-stock-market.cursor-rule.md ~/.cursor/rules/noah-stock-market.md
 ```
 
 If you are installing from the ZIP package:
@@ -147,7 +147,7 @@ If you are installing from the ZIP package:
 unzip noah-agent-skills-installer.zip
 cd noah-agent-skills-installer
 mkdir -p ~/.cursor/rules
-cp skills/noah-stock-market/SKILL.md ~/.cursor/rules/noah-stock-market.md
+cp release/noah-stock-market.cursor-rule.md ~/.cursor/rules/noah-stock-market.md
 ```
 
 After copying, reopen Cursor or start a new conversation so the rules can take effect.
@@ -157,12 +157,12 @@ After copying, reopen Cursor or start a new conversation so the rules can take e
 <details>
 <summary><b>Claude Desktop / Claude.ai</b> - Custom Instructions</summary>
 
-Open the Custom Instructions settings and paste a condensed version of the Noah skill instructions.
+Open the Custom Instructions settings and paste the condensed instructions file.
 
 Recommended source:
-- `noah-stock-market/SKILL.md`
+- `release/noah-stock-market.claude-instructions.md`
 
-If the full content is too long for the instruction box, keep the core capability summary and usage guidance.
+If the instruction box has strict limits, keep the capability summary, scope limits, and behavior rules.
 
 </details>
 
