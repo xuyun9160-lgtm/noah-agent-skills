@@ -124,21 +124,49 @@
           <h2 class="section-title" data-i18n="installTitle">安装方式</h2>
           <div class="pill-list" style="margin-bottom:14px">
             <span class="pill">OpenClaw</span>
-            <span class="pill">ClawHub</span>
-            <span class="pill">ZIP Fallback</span>
-            <span class="pill">GitHub</span>
+            <span class="pill">Claude Code</span>
+            <span class="pill">Cursor</span>
+            <span class="pill">Claude Desktop</span>
           </div>
+          <table>
+            <tr><th>Client</th><th>How</th></tr>
+            <tr><td>OpenClaw</td><td>ZIP 安装包 / 安装指引</td></tr>
+            <tr><td>Claude Code</td><td>复制 skill 到 <code>~/.claude/skills/</code></td></tr>
+            <tr><td>Cursor (Claude Extension)</td><td>复用 <code>~/.claude/skills/</code></td></tr>
+            <tr><td>Cursor (Built-in)</td><td>使用 Cursor Rule 文件</td></tr>
+            <tr><td>Claude Desktop / Claude.ai</td><td>使用精简版 Custom Instructions</td></tr>
+          </table>
           <pre><code>openclaw skills install noah-stock-market
 openclaw skills update noah-stock-market</code></pre>
-          <pre><code>clawhub install noah-stock-market
-clawhub update noah-stock-market</code></pre>
         </div>
         <div class="card">
           <h2 class="section-title" data-i18n="verifyTitle">验证安装</h2>
           <pre><code>python3 noah-stock-market/scripts/run_query.py snapshot HK-00700
 python3 noah-stock-market/scripts/run_query.py ipo_list HK market=HK
 python3 noah-stock-market/scripts/run_query.py rank HK market_codes=HK rank_field=raisePercent page=1 page_size=10</code></pre>
-          <p data-i18n="verifyTip">配置好 NOAH_MARKET_APIKEY 后，如果三条命令都能返回数据，说明安装成功。</p>
+          <p data-i18n="verifyTip">当前版本已内置默认 market key；若三条命令都能返回数据，说明安装成功。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">客户端下载产物</h2>
+      <p class="section-desc">针对不同客户端，当前 release 已提供对应的安装产物与说明文件。</p>
+      <div class="grid-3">
+        <div class="card">
+          <h4>ZIP 安装包</h4>
+          <p>适用于 OpenClaw 与通用安装场景。</p>
+          <p style="margin-top:12px"><a class="primary-btn" href="./noah-agent-skills-installer.zip" download>下载 ZIP</a></p>
+        </div>
+        <div class="card">
+          <h4>Cursor Rule</h4>
+          <p>适用于 Cursor Built-in AI，可直接放入 rules 目录。</p>
+          <p style="margin-top:12px"><a class="ghost-btn" href="./noah-stock-market.cursor-rule.md" download>下载 Cursor Rule</a></p>
+        </div>
+        <div class="card">
+          <h4>Claude Instructions</h4>
+          <p>适用于 Claude Desktop / Claude.ai 的自定义指令。</p>
+          <p style="margin-top:12px"><a class="ghost-btn" href="./noah-stock-market.claude-instructions.md" download>下载 Instructions</a></p>
         </div>
       </div>
     </section>
