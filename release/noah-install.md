@@ -71,7 +71,7 @@ noah-agent-skills-installer/
 
 ## Configure by Client
 
-Choose the setup method for your AI client.
+Choose the setup method for your AI client. This main install document supports multiple clients and keeps all install paths in one place.
 
 | AI Client | Setup Method | Scope | Est. Time |
 |-----------|-------------|-------|-----------|
@@ -84,7 +84,7 @@ Choose the setup method for your AI client.
 
 ### Detailed Setup Steps
 
-> 本文档是对外唯一主安装文档。不同客户端的安装方式统一收口在这里。
+> 本文档是对外唯一主安装文档。OpenClaw、Claude Code、Cursor、Claude Desktop / Claude.ai 的安装方式统一收口在这里。
 
 
 <details>
@@ -110,6 +110,7 @@ The installer will automatically:
 - create `~/.openclaw/.secrets/` if missing
 - generate default market configuration if missing
 - preserve existing configuration when possible
+- allow immediate use with the built-in default market key in the current release
 
 </details>
 
