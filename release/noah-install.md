@@ -69,11 +69,13 @@ noah-agent-skills-installer/
 
 ## Configure by Client
 
-Choose the setup method for your AI client. This guide currently focuses on the ZIP installation path.
+Choose the setup method for your AI client.
 
 | AI Client | Setup Method | Scope | Est. Time |
 |-----------|-------------|-------|-----------|
 | OpenClaw | Download ZIP, extract, and run installer script | Global / workspace | < 2 min |
+| Claude Code CLI | Copy the skill folder into `~/.claude/skills/` | Global (all projects) | 2 min |
+| Cursor / VS Code / JetBrains (with Claude Extension) | Reuse `~/.claude/skills/` | Global (all projects) | 2 min |
 | AI tools that can read install guides | Send this guide or ZIP install instructions into the conversation | Depends on client | 1-3 min |
 
 ### Detailed Setup Steps
@@ -101,6 +103,29 @@ The installer will automatically:
 - create `~/.openclaw/.secrets/` if missing
 - generate default market configuration if missing
 - preserve existing configuration when possible
+
+</details>
+
+<details>
+<summary><b>Claude Code CLI / Cursor / VS Code / JetBrains (with Claude Extension)</b> - Global Skills Directory</summary>
+
+These tools can share the `~/.claude/skills/` directory. Install once and reuse across projects.
+
+```bash
+mkdir -p ~/.claude/skills
+cp -R noah-stock-market ~/.claude/skills/noah-stock-market
+```
+
+If you are installing from the ZIP package:
+
+```bash
+unzip noah-agent-skills-installer.zip
+cd noah-agent-skills-installer
+mkdir -p ~/.claude/skills
+cp -R skills/noah-stock-market ~/.claude/skills/noah-stock-market
+```
+
+After copying, start a new conversation or reopen the client so the skill can be discovered.
 
 </details>
 
