@@ -34,7 +34,8 @@ Current Noah Skills focus on **Search / Market Query Skills**.
 | Rank | Query rank data | `Show HK top gainers rank` |
 | US Analysis | Query analyst / target-price style info | `Show AAPL analyst view` |
 
-> Current public release installs `noah-stock-market` by default.
+> The installer installs all skills under the corresponding directory inside the package.
+> In the current package, the included market skill is `noah-stock-market`.
 > Finance HK/US and shareholder endpoints are present in the latest spec, but are still pending formal integration.
 
 ---
@@ -194,8 +195,9 @@ If these commands return data successfully, the installation is ready.
 - The market Base URL is built in:
   `https://securities-open-api.noahgroup.com`
 - Current release includes a built-in default market API key fallback for direct experience.
-- Current release installs `noah-stock-market` by default.
-- `noah-stock-trade` remains in the repository for ongoing development, but is not the default install target in this release.
+- The installer installs all skills under the corresponding directory inside the package.
+- In the current package, the included market skill is `noah-stock-market`.
+- `noah-stock-trade` remains in the repository for ongoing development, but is not included in this release package.
 - All OpenAPI enum parameters must be taken from `enum.yaml`, not guessed semantically.
 
 ---
