@@ -59,6 +59,8 @@ Extracted directory structure:
 noah-agent-skills-installer/
 +-- skills/
 |   +-- noah-stock-market/
++-- release/
+|   +-- noah-install.md
 +-- README.md
 +-- INSTALL.md
 +-- install_openclaw_skills.sh
