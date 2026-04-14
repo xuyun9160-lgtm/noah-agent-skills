@@ -18,7 +18,7 @@ By installing Noah Skills, you can query HK/US market data directly inside AI co
 
 ## Feature Overview
 
-Current Noah Skills focus on **Market Skills**.
+Current Noah Skills focus on **Search / Market Query Skills**.
 
 | Capability | Description | Example |
 |------------|-------------|---------|
@@ -57,7 +57,7 @@ Extracted directory structure:
 
 ```text
 noah-agent-skills-installer/
-+-- skills/
++-- search-skills/
 |   +-- noah-stock-market/
 +-- release/
 |   +-- noah-install.md
@@ -106,7 +106,7 @@ bash install_openclaw_skills.sh
 
 The installer will automatically:
 
-- install `noah-stock-market`
+- install search / market query skills from the package
 - create `~/.openclaw/.secrets/` if missing
 - generate default market configuration if missing
 - preserve existing configuration when possible
@@ -120,7 +120,7 @@ These tools can share the `~/.claude/skills/` directory. Install once and reuse 
 
 ```bash
 mkdir -p ~/.claude/skills
-cp -R noah-stock-market ~/.claude/skills/noah-stock-market
+cp -R search-skills/noah-stock-market ~/.claude/skills/noah-stock-market
 ```
 
 If you are installing from the ZIP package:
@@ -129,7 +129,7 @@ If you are installing from the ZIP package:
 unzip noah-agent-skills-installer.zip
 cd noah-agent-skills-installer
 mkdir -p ~/.claude/skills
-cp -R skills/noah-stock-market ~/.claude/skills/noah-stock-market
+cp -R search-skills/noah-stock-market ~/.claude/skills/noah-stock-market
 ```
 
 After copying, start a new conversation or reopen the client so the skill can be discovered.
@@ -143,7 +143,7 @@ Copy `SKILL.md` into the Cursor rules directory as a standalone rule file.
 
 ```bash
 mkdir -p ~/.cursor/rules
-cp noah-stock-market/SKILL.md ~/.cursor/rules/noah-stock-market.md
+cp search-skills/noah-stock-market/SKILL.md ~/.cursor/rules/noah-stock-market.md
 ```
 
 If you are installing from the ZIP package:
@@ -152,7 +152,7 @@ If you are installing from the ZIP package:
 unzip noah-agent-skills-installer.zip
 cd noah-agent-skills-installer
 mkdir -p ~/.cursor/rules
-cp skills/noah-stock-market/SKILL.md ~/.cursor/rules/noah-stock-market.md
+cp search-skills/noah-stock-market/SKILL.md ~/.cursor/rules/noah-stock-market.md
 ```
 
 After copying, reopen Cursor or start a new conversation so the rules can take effect.
