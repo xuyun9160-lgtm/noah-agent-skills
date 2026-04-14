@@ -11,7 +11,6 @@
 - `/quotes/get_broker_queue`
 - `/quotes/get_cur_kline`
 - `/quotes/get_cur_kline_date`
-- `/quotes/get_order_book`
 - `/infos/get_capital_flow`
 - `/quote/get_stock_basicinfo`
 - `/quote/request_trading_days`
@@ -20,24 +19,16 @@
 - `/rank/get_stock_rank`
 
 ## 当前环境暂不支持或未验证通过
-- `/quote/get_stock_filter`
-  - 当前按 `entity.yaml#/components/schemas/StockFilterConfig` 严格构造请求后，仍未通过
-  - 现阶段按“暂不支持”处理，不对外暴露
+- `/infos/get_finance_hk_infos`
+  - 最新文档存在，但当前尚未完成正式接入与验证
 
-- `/quote/get_plate_list`
-  - 返回：HTTP 200
-  - 业务结果：`success=false`
-  - message：`生产环境暂不支持`
+- `/infos/get_finance_us_infos`
+  - 最新文档存在，但当前尚未完成正式接入与验证
 
-- `/derivatives/get_option_chain`
-  - 返回：HTTP 200
-  - 业务结果：`success=false`
-  - message：`生产环境暂不支持`
-
-- `/derivatives/get_option_expiration_date`
-  - 返回：HTTP 404
-  - 业务返回 message 不可靠，当前调用方式未验证通过
-  - 文档描述显示该接口更偏向衍生权证 / uCode 场景，未必适合直接传正股代码
+- `/infos/shareholder_inc_red_hold`
+- `/infos/shareholder_inc_red_hold_by_date`
+- `/infos/shareholder_inc_red_hold_by_ucode`
+  - 最新文档存在，但当前尚未完成正式接入与验证
 
 - 美股 K 线（如 `US-AAPL`, `US-NVDA`）
   - 自然语言路由已能正确识别为 `kline`

@@ -9,7 +9,7 @@
 - `release/noah-agent-skills-installer.zip`
 
 其中：
-- `noah-stock-market` 负责市场数据、行情、K线、分时、逐笔、经纪队列、交易日历、全局市场状态、摆盘、资金流向、美股分析等能力
+- `noah-stock-market` 负责市场数据、行情、K线、分时、逐笔、经纪队列、交易日历、全局市场状态、资金流向、美股分析、IPO 列表、排行榜等能力
 - `noah-stock-trade` 当前仍保留在仓库中继续完善，但本版本暂不作为默认安装项
 
 ## 一键安装（推荐）
@@ -80,12 +80,15 @@ bash install_openclaw_skills.sh
 ### Market module
 当前 `noah-stock-market` 已支持：
 - 股票快照 / 最新行情
-- 市场状态
-- 分时
-- K线
-- 摆盘
+- 市场状态 / 全局市场状态
+- 分时 / 逐笔 / 经纪队列
+- K线 / 时间区间 K 线
 - 资金流向
 - 基础信息
+- 交易日历
+- IPO 列表
+- 排行榜
+- 美股分析
 
 ### Trade module
 当前 `noah-stock-trade` 已打通或部分打通：
@@ -175,8 +178,8 @@ NOAH_TRADE_GROUP_NO=100636524
 ## Known Limitations
 
 当前已知限制包括：
-- 板块接口在当前环境未完全开放
-- 期权接口在当前环境未开放或返回 404
+- 港美股财务接口在当前文档中已存在，但尚未完成正式接入与验证
+- 股东增减持榜单接口在当前文档中已存在，但尚未完成正式接入与验证
 - `get_order_list` / `get_finished_order_list` 与文档存在不一致
 - `get_order_detail` / `get_order_fee_detail` 当前测试环境返回服务端异常
 

@@ -2,7 +2,7 @@
 name: noah-stock-market
 description: |
   Noah AI Skill installation guide.
-  Capabilities: market snapshot, K-line, intraday, ticker, broker queue, order book,
+  Capabilities: market snapshot, K-line, intraday, ticker, broker queue,
   capital flow, basic info, trading days, market/global state, IPO list, rank, and US analysis.
 metadata:
   author: noah
@@ -12,7 +12,7 @@ metadata:
 
 # Noah Skill Installation Guide
 
-By installing Noah Skills, you can query HK/US market data directly inside AI conversations, including snapshots, K-line, intraday trends, tick-by-tick trades, broker queue, order book, capital flow, trading days, IPO lists, rank, and US analysis.
+By installing Noah Skills, you can query HK/US market data directly inside AI conversations, including snapshots, K-line, intraday trends, tick-by-tick trades, broker queue, capital flow, trading days, IPO lists, rank, and US analysis.
 
 ---
 
@@ -25,7 +25,7 @@ Current Noah Skills focus on **Search / Market Query Skills**.
 | Snapshot / Latest Quote | Query latest price, open/high/low, and market snapshot | `What's Tencent's current price` |
 | K-line Charts | Query daily K-line or date-range K-line data | `Tencent daily K-line for the last 10 bars` |
 | Intraday / Ticker | View intraday trends and tick-by-tick data | `Show me Tencent intraday data` |
-| Order Book / Broker Queue | View order book and broker queue | `Show me Tencent's order book` |
+| Broker Queue | View broker queue data | `Show me Tencent broker queue` |
 | Capital Flow | Query capital flow for a stock | `Tencent capital flow` |
 | Basic Info | Query stock basic information | `When was Tencent listed` |
 | Trading Days | Query trading calendar | `Show HK trading days this month` |

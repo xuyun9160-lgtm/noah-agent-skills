@@ -138,7 +138,7 @@ paths:
 
   /infos/shareholder_inc_red_hold_by_date:
     get:
-      summary: 股东增减持明细榜单按股票代码范围
+      summary: 股东增减持明细榜单按时间范围
       tags:
         - F10 Infos
       parameters:
@@ -390,29 +390,6 @@ paths:
         '404':
           description: 查询数据不存在
 
-  /quotes/get_stock_quote:
-    get:
-      summary: 获取订阅股票报价的实时数据，有订阅要求限制
-      tags:
-        - Real Time Quotes
-      parameters:
-        - name: code_list
-          in: query
-          required: true
-          schema:
-            $ref: 'entity.yaml#/components/schemas/CodeList'
-      responses:
-        '200':
-          description: 成功，data 为列表，元素类型 SecQuoteExtendIndexDto
-          content:
-            application/json:
-              schema:
-                $ref: 'entity.yaml#/components/schemas/SecResponseList'
-        '500':
-          description: 服务器内部错误
-        '404':
-          description: 查询数据不存在
-
   /quotes/get_rt_data:
     get:
       summary: 获取实时分时
@@ -530,39 +507,6 @@ paths:
         '404':
           description: 查询数据不存在
 
-  /quotes/get_order_book:
-    get:
-      summary: 获取实时摆盘
-      tags:
-        - Real Time Quotes
-      parameters:
-        - name: code
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: name
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: num
-          in: query
-          required: false
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: 成功，data 为单个对象（非列表），类型 OrderBook
-          content:
-            application/json:
-              schema:
-                $ref: 'entity.yaml#/components/schemas/SecResponseData'
-        '500':
-          description: 服务器内部错误
-        '404':
-          description: 查询数据不存在
-
   /quotes/get_rt_ticker:
     get:
       summary: 获取实时逐笔
@@ -615,146 +559,6 @@ paths:
           description: 查询数据不存在
 
   # ---------- 衍生品（参考 Futu OpenAPI 文档） ----------
-  /derivatives/get_option_expiration_date:
-    get:
-      summary: 获取期权到期日列表
-      description: |
-        港股衍生权证：调用 securities-infos「衍生权证行情指标（最新）」getHkWartDqIndex，
-        将返回数据中的到期日（maturityDate）映射为 OptionExpirationItem.expiration_date。
-        入参 code 为证券 uniqueCode（uCode），通常对应单只窝轮/牛熊证；有数据时列表长度为 1。
-      tags:
-        - Derivatives
-      parameters:
-        - name: code
-          in: query
-          required: true
-          description: 证券 uniqueCode（uCode），与 infos getHkWartDqIndex 一致
-          schema:
-            type: string
-      responses:
-        '200':
-          description: 成功，data 为列表，元素类型 OptionExpirationItem
-          content:
-            application/json:
-              schema:
-                $ref: 'entity.yaml#/components/schemas/SecResponseList'
-        '500':
-          description: 服务器内部错误
-        '404':
-          description: 查询数据不存在
-
-  /derivatives/get_warrant:
-    get:
-      summary: 筛选窝轮
-      description: 筛选香港市场窝轮、牛熊证、界内证（对应 Futu get_warrant）
-      tags:
-        - Derivatives
-      parameters:
-        - name: stock_owner
-          in: query
-          required: true
-          description: 所属正股股票代码
-          schema:
-            type: string
-        - name: begin
-          in: query
-          required: false
-          description: 数据起始点，分页用
-          schema:
-            type: integer
-            default: 0
-        - name: num
-          in: query
-          required: false
-          description: 请求条数，最大 200
-          schema:
-            type: integer
-            default: 100
-        - name: sort_field
-          in: query
-          required: false
-          description: 排序字段
-          schema:
-            $ref: 'enum.yaml#/WarrantSortField'
-        - name: ascend
-          in: query
-          required: false
-          description: 排序方向 true 升序 false 降序
-          schema:
-            type: boolean
-        - name: warrant_type
-          in: query
-          required: false
-          description: 窝轮类型筛选
-          schema:
-            $ref: 'enum.yaml#/WrtType'
-        - name: maturity_time_min
-          in: query
-          required: false
-          description: 到期日范围开始 yyyyMMdd
-          schema:
-            type: string
-        - name: maturity_time_max
-          in: query
-          required: false
-          description: 到期日范围结束 yyyyMMdd
-          schema:
-            type: string
-      responses:
-        '200':
-          description: 成功，data 为列表，元素类型 WarrantItem
-          content:
-            application/json:
-              schema:
-                $ref: 'entity.yaml#/components/schemas/SecResponseList'
-        '500':
-          description: 服务器内部错误
-        '404':
-          description: 查询数据不存在
-
-  /quote/get_plate_stock:
-    get:
-      tags:
-        - Market
-      summary: 获取特定板块下的股票列表
-      description: 对应 Futu get_plate_stock / GetPlateSecurity
-      operationId: getPlateStock
-      parameters:
-        - name: plate_code
-          in: query
-          required: true
-          description: 板块代码
-          schema:
-            $ref: 'enum.yaml#/PlateStockSortField'
-        - name: market
-          in: query
-          required: true
-          description: 市场字段
-          schema:
-            $ref: 'enum.yaml#/Markets'
-        - name: page
-          in: query
-          required: true
-          description: 页码
-          schema:
-            type: integer
-        - name: pageSize
-          in: query
-          required: true
-          description: 每页数量
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: 成功，data 为列表，元素类型 PlateStockItem
-          content:
-            application/json:
-              schema:
-                $ref: 'entity.yaml#/components/schemas/SecResponseList'
-        '500':
-          description: 服务器内部错误
-        '404':
-          description: 查询数据不存在
 
   /quote/get_stock_basicinfo:
     get:
@@ -785,33 +589,6 @@ paths:
       responses:
         '200':
           description: 成功，data 为列表，元素类型 StockBasicInfoItem
-          content:
-            application/json:
-              schema:
-                $ref: 'entity.yaml#/components/schemas/SecResponseList'
-        '500':
-          description: 服务器内部错误
-        '404':
-          description: 查询数据不存在
-
-  /quote/get_stock_filter:
-    post:
-      tags:
-        - Market
-      summary: 条件选股
-      description: |
-        对应 Futu get_stock_filter / StockFilter。
-        请求参数通过 JSON 请求体（application/json）传递，避免 GET query 无法绑定复杂筛选列表的问题。
-      operationId: getStockFilter
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: 'entity.yaml#/components/schemas/StockFilterConfig'
-      responses:
-        '200':
-          description: 成功，data 为列表，元素类型 SecStockFilter（合并量化策略与扩展行情字段）
           content:
             application/json:
               schema:

@@ -8,18 +8,14 @@
 | Market State | Ready | 已验证，可返回市场状态文本 |
 | Intraday | Ready | 已验证，支持 detail mode，默认最多展示最近 10 条 |
 | Kline | Ready | 已验证 `get_cur_kline` 与 `get_cur_kline_date` 主路径可用；detail mode 已支持 |
-| Orderbook | Ready | 已验证接口 200；个别时点可能返回空档位，但不影响接口可用性判断 |
 | Capital Flow | Ready | 已验证，支持 detail mode；尾部 0 值占位记录已处理 |
 | Basic Info | Ready | 已验证，可返回上市日期、每手股数、退市状态等 |
 | CN Name Parsing | Partial | 已支持部分常见名称和歧义澄清；目前仍以本地映射为主，未接入正式搜索接口 |
 | HK / US Ambiguity Clarification | Ready | 已支持阿里巴巴、百度、京东、哔哩哔哩、蔚来、小鹏、理想等双市场名称澄清 |
-| Plate List / Plate Stock | Unsupported in current env | 当前环境未正式开放 |
-| Option Expiration | Unsupported in current env | 当前环境返回 404 |
-| Option Chain | Unsupported in current env | 当前环境暂不支持 |
-
 | IPO List | Ready | 已验证 `/quote/get_ipo_list` 可用 |
 | Rank | Ready | 已按 `references/enum.yaml#/QuoteSortField` 严格取枚举值验证通过 |
-| Stock Filter | Unsupported in current env | 接口协议已沉淀，但当前环境暂不支持，先不对外暴露 |
+| Finance HK / US | Partial | 文档中存在接口，当前尚未纳入正式对外能力 |
+| Shareholder Inc/Red Hold | Partial | 文档中存在接口，当前尚未纳入正式对外能力 |
 
 ## Notes
 

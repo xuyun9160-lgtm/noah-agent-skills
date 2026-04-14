@@ -12,7 +12,7 @@
 
 | Module | Description | Auth Required |
 |---|---|:---:|
-| `noah-stock-market` | 港股 / 美股只读市场数据查询与结构化摘要（含逐笔、经纪队列、交易日历、全局市场状态、美股分析） | Yes |
+| `noah-stock-market` | 港股 / 美股只读市场数据查询与结构化摘要（含逐笔、经纪队列、交易日历、全局市场状态、IPO 列表、排行榜、美股分析） | Yes |
 | `noah-stock-trade` | 当前保留在仓库中继续完善，但本版本暂不作为默认安装项 | Yes |
 
 ## Requirements
@@ -136,6 +136,8 @@ python3 scripts/noah_trade_cli.py max-enable-buy-amt --symbol HK.00700 --order-t
 python3 noah-stock-market/scripts/run_query.py snapshot HK-00700
 python3 noah-stock-market/scripts/run_query.py kline HK-00700 num=10 ktype=K_DAY
 python3 noah-stock-market/scripts/run_query.py capital_flow HK-00700 num=5
+python3 noah-stock-market/scripts/run_query.py ipo_list HK market=HK
+python3 noah-stock-market/scripts/run_query.py rank HK market_codes=HK rank_field=raisePercent page=1 page_size=10
 ```
 
 ### Trade examples

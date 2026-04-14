@@ -36,18 +36,17 @@ NOAH_API_BASE_URL=https://securities-open-api.noahgroup.com
 当前环境已验证支持：
 - 个股快照 / 最新行情
 - 实时分时 / K线（含时间范围 K 线）
-- 实时摆盘
 - 逐笔成交 / 经纪队列
 - 市场状态 / 全局市场状态
 - 交易日历
 - 个股资金流向
 - 股票基础信息
+- IPO 列表 / 排行榜
 - 美股分析（US analysis）
 
 当前接口已存在但环境未完全验证或暂不支持：
-- 板块列表 / 板块成分股
-- 期权到期日 / 期权链
-- 可选高级能力：排行榜、条件选股、IPO 列表、港美股财务数据、股东增减持榜单
+- 港美股财务数据
+- 股东增减持榜单
 
 不支持：
 - 下单 / 撤单 / 改单
@@ -62,11 +61,10 @@ NOAH_API_BASE_URL=https://securities-open-api.noahgroup.com
    - 标的识别 / 代码标准化 → `references/symbol-resolution.md`
    - 快照 / 最新行情 → `references/snapshot-and-quote.md`
    - 分时 / K线 → `references/kline-and-intraday.md`
-   - 摆盘 / 逐笔 / 经纪队列 → `references/orderbook-ticker-broker.md`
+   - 逐笔 / 经纪队列 → `references/orderbook-ticker-broker.md`
    - 市场状态 / 交易日 → `references/market-status.md`
    - 资金流向 → `references/capital-flow.md`
-   - 板块 / 基本信息 → `references/plates-and-basicinfo.md`
-   - 期权 / 衍生品 → `references/options-and-derivatives.md`
+   - 基本信息 → `references/plates-and-basicinfo.md`
    - API 意图映射 → `references/api-mapping.md`
    - 使用方式总览 → `references/usage-guide.md`
    - 当前限制 → `references/known-limitations.md`
@@ -78,8 +76,8 @@ NOAH_API_BASE_URL=https://securities-open-api.noahgroup.com
 - 用户输入名称、简称或裸代码时，先做标准化，再请求接口。
 - 如标的存在歧义，不要猜；先返回候选或要求用户澄清市场 / 代码。
 - 默认返回结构化摘要，不直接倾倒整段原始 JSON。
-- 仅当用户明确要求“明细”“完整逐笔”“完整盘口”“完整期权链”时，才展开更多原始字段。
-- 排行榜、条件选股、IPO 列表属于扩展能力；只有当用户明确问到时才使用。
+- 仅当用户明确要求“明细”“完整逐笔”时，才展开更多原始字段。
+- 排行榜、IPO 列表属于扩展能力；只有当用户明确问到时才使用。
 
 ## Recommended Script Entry
 
@@ -97,14 +95,12 @@ NOAH_API_BASE_URL=https://securities-open-api.noahgroup.com
 - `ticker`
 - `broker_queue`
 - `kline`
-- `orderbook`
 - `capital_flow`
 - `basicinfo`
 - `trading_days`
 - `us_analysis`
 - `rank`
 - `ipo_list`
-- `stock_filter`
 
 示例：
 
@@ -117,14 +113,12 @@ python3 scripts/run_query.py ticker HK-00700 num=10
 python3 scripts/run_query.py broker_queue HK-00700
 python3 scripts/run_query.py kline HK-00700 num=10 ktype=K_DAY
 python3 scripts/run_query.py kline HK-00700 from=20260401000000000 to=20260413235959999 ktype=K_DAY autype=NONE
-python3 scripts/run_query.py orderbook HK-00700
 python3 scripts/run_query.py capital_flow HK-00700 num=5
 python3 scripts/run_query.py basicinfo HK-00700
 python3 scripts/run_query.py trading_days HK-00700 start=20260401 end=20260430
 python3 scripts/run_query.py us_analysis US-AAPL
-python3 scripts/run_query.py rank HK market_codes=HK rank_field=CHANGE_RATE page=1 page_size=10
+python3 scripts/run_query.py rank HK market_codes=HK rank_field=raisePercent page=1 page_size=10
 python3 scripts/run_query.py ipo_list HK market=HK
-python3 scripts/run_query.py stock_filter HK market=HK page=1 page_size=10 sort_field=CUR_PRICE
 ```
 
 如果脚本返回 `ok=false`，先直接向用户说明失败原因，不要编造数据。

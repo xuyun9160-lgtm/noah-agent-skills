@@ -14,10 +14,8 @@ from summarize_market import (
     summarize_ipo_list,
     summarize_kline,
     summarize_market_state,
-    summarize_orderbook,
     summarize_rank,
     summarize_snapshot,
-    summarize_stock_filter,
     summarize_ticker,
     summarize_trading_days,
     summarize_us_analysis,
@@ -30,10 +28,8 @@ from format_market_text import (
     format_ipo_list,
     format_kline,
     format_market_state,
-    format_orderbook,
     format_rank,
     format_snapshot,
-    format_stock_filter,
     format_ticker,
     format_trading_days,
     format_us_analysis,
@@ -72,8 +68,6 @@ def build_params(intent: str, symbol: str, **kwargs) -> Dict[str, Any]:
             'ktype': ktype,
             'autype': autype,
         }
-    if intent == 'orderbook':
-        return {'code': symbol, 'num': int(kwargs.get('num', 5))}
     if intent == 'capital_flow':
         return {'stock_code': symbol, 'num': int(kwargs.get('num', 5))}
     if intent == 'basicinfo':
@@ -99,21 +93,6 @@ def build_params(intent: str, symbol: str, **kwargs) -> Dict[str, Any]:
         return {
             'market': ensure_enum('Market', kwargs.get('market') or symbol),
         }
-    if intent == 'stock_filter':
-        market = ensure_enum('Markets', kwargs.get('market') or symbol)
-        sort_field = ensure_enum('QuoteSortField', kwargs.get('sort_field', 'lastPrice'))
-        ascend = str(kwargs.get('ascend', 'false')).lower() in ('1', 'true', 'yes', 'y')
-        page = int(kwargs.get('page', 0))
-        page_size = int(kwargs.get('page_size', 10))
-        payload = {
-            'market': market,
-            'filter_list': kwargs.get('filter_list', []),
-            'sort_field': sort_field,
-            'ascend': ascend,
-            'page': page,
-            'page_size': page_size,
-        }
-        return payload
     raise ValueError(f'unsupported intent: {intent}')
 
 
@@ -123,7 +102,7 @@ def run(intent: str, raw_symbol: str, **kwargs) -> Dict[str, Any]:
     else:
         symbol = normalize_symbol(raw_symbol) or raw_symbol
     client = NoahQuoteClient()
-    supported = {'snapshot', 'market_state', 'global_state', 'intraday', 'ticker', 'broker_queue', 'kline', 'orderbook', 'capital_flow', 'basicinfo', 'trading_days', 'us_analysis', 'rank', 'ipo_list', 'stock_filter'}
+    supported = {'snapshot', 'market_state', 'global_state', 'intraday', 'ticker', 'broker_queue', 'kline', 'capital_flow', 'basicinfo', 'trading_days', 'us_analysis', 'rank', 'ipo_list'}
     if intent not in supported:
         return {'ok': False, 'message': f'unsupported intent: {intent}', 'symbol': symbol}
 
@@ -135,21 +114,16 @@ def run(intent: str, raw_symbol: str, **kwargs) -> Dict[str, Any]:
         'ticker': '/quotes/get_rt_ticker',
         'broker_queue': '/quotes/get_broker_queue',
         'kline': '/quotes/get_cur_kline_date' if kwargs.get('from') and kwargs.get('to') else '/quotes/get_cur_kline',
-        'orderbook': '/quotes/get_order_book',
         'capital_flow': '/infos/get_capital_flow',
         'basicinfo': '/quote/get_stock_basicinfo',
         'trading_days': '/quote/request_trading_days',
         'us_analysis': '/infos/get_us_analysis',
         'rank': '/rank/get_stock_rank',
         'ipo_list': '/quote/get_ipo_list',
-        'stock_filter': '/quote/get_stock_filter',
     }
 
     params = build_params(intent, symbol, **kwargs)
-    if intent == 'stock_filter':
-        result = client.post(path_map[intent], params)
-    else:
-        result = client.get(path_map[intent], params)
+    result = client.get(path_map[intent], params)
     out = {
         'ok': result['ok'],
         'http_status': result['http_status'],
@@ -202,10 +176,6 @@ def run(intent: str, raw_symbol: str, **kwargs) -> Dict[str, Any]:
         summary = summarize_kline(data, detail=detail)
         out['summary'] = summary
         out['text'] = format_kline(summary, detail=detail)
-    elif intent == 'orderbook' and isinstance(data, dict):
-        summary = summarize_orderbook(data)
-        out['summary'] = summary
-        out['text'] = format_orderbook(summary)
     elif intent == 'capital_flow' and isinstance(data, list):
         detail = str(kwargs.get('detail', 'false')).lower() in ('1', 'true', 'yes', 'y')
         summary = summarize_capital_flow(data, detail=detail)
@@ -231,10 +201,6 @@ def run(intent: str, raw_symbol: str, **kwargs) -> Dict[str, Any]:
         summary = summarize_ipo_list(data)
         out['summary'] = summary
         out['text'] = format_ipo_list(summary)
-    elif intent == 'stock_filter' and isinstance(data, list):
-        summary = summarize_stock_filter(data)
-        out['summary'] = summary
-        out['text'] = format_stock_filter(summary)
     else:
         out['text'] = '查询成功，但当前没有可展示的数据。'
     return out
