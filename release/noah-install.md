@@ -43,9 +43,16 @@ metadata:
 
 推荐顺序：
 1. 先让 AI 读取本安装指引
-2. 再根据本指引下载 Noah 安装包并解压
+2. 优先尝试通过 ClawHub 安装 `noah-stock-market`
+3. 若 ClawHub 路径不可用，再根据本指引下载 Noah 安装包并解压
 
-下载 Noah 安装包并解压：
+优先安装命令：
+
+```bash
+openclaw skills install noah-stock-market
+```
+
+若优先路径不可用，再执行 zip 安装：
 
 **[Download noah-agent-skills-installer.zip](./noah-agent-skills-installer.zip)**
 
@@ -81,7 +88,12 @@ noah-agent-skills-installer/
 
 如果你使用的是公开页面，请把上面的地址替换成线上可访问的 `noah-install.md` 链接。
 
-安装指引会再引用 zip 下载地址与安装步骤。也可以直接通过 ClawHub / OpenClaw Skills 安装：
+安装策略应为：
+1. 优先尝试 ClawHub / OpenClaw Skills 安装
+2. 若当前环境不支持或安装失败，再自动回退到 zip 安装
+3. 除非失败，否则尽量不向用户暴露底层分支细节
+
+也可以直接通过 ClawHub / OpenClaw Skills 安装：
 
 ```bash
 openclaw skills install noah-stock-market

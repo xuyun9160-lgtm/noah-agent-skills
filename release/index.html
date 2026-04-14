@@ -80,7 +80,7 @@
         <section id="quick-install" class="panel">
           <div class="kicker">Quick Install</div>
           <h2 class="section-title">一句话安装 — 复制发送给任意 AI</h2>
-          <p class="section-desc">类似 Futu Skill 的安装方式，我们也支持通过一句自然语言让 AI 直接安装 Noah Skills。</p>
+          <p class="section-desc">类似 Futu Skill 的安装方式，我们也支持通过一句自然语言让 AI 直接安装 Noah Skills。AI 应优先尝试 ClawHub 安装，若当前环境不支持，再自动回退到 zip 安装。</p>
           <pre><code>根据指引安装 Noah Skills：./noah-install.md</code></pre>
           <p>如果使用公开地址部署此页面，请将上面的地址替换成线上可访问的 <code>noah-install.md</code> 链接。AI 应先读取安装指引，再按文档获取 zip 并完成安装。</p>
         </section>
@@ -112,9 +112,10 @@ bash install_openclaw_skills.sh</code></pre>
           </table>
           <h3>OpenClaw</h3>
           <pre><code>根据指引安装 Noah Skills：./noah-install.md</code></pre>
-          <h3>ClawHub 安装与更新</h3>
+          <h3>ClawHub 安装与更新（优先）</h3>
           <pre><code>openclaw skills install noah-stock-market
 openclaw skills update noah-stock-market</code></pre>
+          <p>若当前环境无法通过 ClawHub / OpenClaw Skills 完成安装，再自动回退到 zip 安装。</p>
           <pre><code>clawhub install noah-stock-market
 clawhub update noah-stock-market</code></pre>
           <p>当前已发布版本：<code>noah-stock-market@1.2.0</code></p>
