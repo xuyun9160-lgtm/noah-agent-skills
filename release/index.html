@@ -29,7 +29,7 @@
   <div class="layout">
     <aside class="sidebar">
       <div class="nav-group"><div class="nav-group-title">介绍</div><a class="nav-item active" href="#intro">接入 AI 与 OpenClaw</a></div>
-      <div class="nav-group"><div class="nav-group-title">文档与安装</div><a class="nav-item" href="#docs-for-ai">下载文档供 AI 读取</a><a class="nav-item" href="#install-skills">安装 Skills 技能包</a><a class="nav-item" href="#package-structure">安装包结构</a></div>
+      <div class="nav-group"><div class="nav-group-title">文档与安装</div><a class="nav-item" href="#docs-for-ai">下载文档供 AI 读取</a><a class="nav-item" href="#install-skills">安装 Skills 技能包</a><a class="nav-item" href="#install-from-clawhub">从 ClawHub 安装与更新</a><a class="nav-item" href="#package-structure">安装包结构</a></div>
       <div class="nav-group"><div class="nav-group-title">功能说明</div><a class="nav-item" href="#skills-overview">Skills 功能一览</a><a class="nav-item" href="#market-skill">noah-stock-market</a><a class="nav-item" href="#trade-skill">noah-stock-trade</a></div>
       <div class="nav-group"><div class="nav-group-title">使用方式</div><a class="nav-item" href="#usage">使用方式</a><a class="nav-item" href="#cli-market">Market 示例</a></div>
       <div class="nav-group"><div class="nav-group-title">接口一览</div><a class="nav-item" href="#interfaces">接口一览</a><a class="nav-item" href="#market-apis">行情接口</a><a class="nav-item" href="#verified-market">当前已验证接口</a></div>
@@ -110,6 +110,16 @@ bash install_openclaw_skills.sh
         <div class="panel"><strong>从 GitHub 仓库一键安装</strong><pre><code>git clone https://github.com/xuyun9160-lgtm/noah-agent-skills.git
 cd noah-agent-skills
 bash install_openclaw_skills.sh</code></pre></div>
+      </section>
+
+      <section id="install-from-clawhub">
+        <h3>从 ClawHub 安装与更新</h3>
+        <p>如果您已经使用 ClawHub，也可以直接安装或更新最新版 <code>noah-stock-market</code>。</p>
+        <div class="panel"><strong>安装</strong><pre><code>openclaw skills install noah-stock-market</code></pre></div>
+        <div class="panel"><strong>更新</strong><pre><code>openclaw skills update noah-stock-market</code></pre></div>
+        <div class="panel"><strong>ClawHub CLI（可选）</strong><pre><code>clawhub install noah-stock-market
+clawhub update noah-stock-market</code></pre></div>
+        <p>当前已发布版本：<code>noah-stock-market@1.2.0</code></p>
       </section>
 
       <section id="package-structure">
