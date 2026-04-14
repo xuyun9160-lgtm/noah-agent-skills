@@ -57,6 +57,10 @@ NOAH_TRADE_GROUP_NO=100636524
 
 ## One-click Install
 
+公开安装页与安装包：
+- 页面：`release/index.html`
+- 安装包：`release/noah-agent-skills-installer.zip`
+
 理解并执行以下代码块指令：
 
 ```text

@@ -4,6 +4,10 @@
 
 - `noah-stock-market`
 
+新版安装页与安装包产物位于：
+- `release/index.html`
+- `release/noah-agent-skills-installer.zip`
+
 其中：
 - `noah-stock-market` 负责市场数据、行情、K线、分时、逐笔、经纪队列、交易日历、全局市场状态、摆盘、资金流向、美股分析等能力
 - `noah-stock-trade` 当前仍保留在仓库中继续完善，但本版本暂不作为默认安装项
