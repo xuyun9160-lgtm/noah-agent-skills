@@ -82,6 +82,9 @@ Choose the setup method for your AI client.
 
 ### Detailed Setup Steps
 
+> 本文档是对外唯一主安装文档。不同客户端的安装方式统一收口在这里。
+
+
 <details>
 <summary><b>OpenClaw</b> - ZIP install</summary>
 
@@ -138,7 +141,7 @@ Copy `SKILL.md` into the Cursor rules directory as a standalone rule file.
 
 ```bash
 mkdir -p ~/.cursor/rules
-cp release/noah-stock-market.cursor-rule.md ~/.cursor/rules/noah-stock-market.md
+cp noah-stock-market/SKILL.md ~/.cursor/rules/noah-stock-market.md
 ```
 
 If you are installing from the ZIP package:
@@ -147,7 +150,7 @@ If you are installing from the ZIP package:
 unzip noah-agent-skills-installer.zip
 cd noah-agent-skills-installer
 mkdir -p ~/.cursor/rules
-cp release/noah-stock-market.cursor-rule.md ~/.cursor/rules/noah-stock-market.md
+cp skills/noah-stock-market/SKILL.md ~/.cursor/rules/noah-stock-market.md
 ```
 
 After copying, reopen Cursor or start a new conversation so the rules can take effect.
@@ -157,12 +160,9 @@ After copying, reopen Cursor or start a new conversation so the rules can take e
 <details>
 <summary><b>Claude Desktop / Claude.ai</b> - Custom Instructions</summary>
 
-Open the Custom Instructions settings and paste the condensed instructions file.
+Open the Custom Instructions settings and paste a condensed version derived from Noah Stock Market instructions.
 
-Recommended source:
-- `release/noah-stock-market.claude-instructions.md`
-
-If the instruction box has strict limits, keep the capability summary, scope limits, and behavior rules.
+If the instruction box has strict limits, keep the capability summary, scope limits, and behavior rules from this main install document.
 
 </details>
 
