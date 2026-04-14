@@ -1,47 +1,228 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Noah Agent Skills</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Noah Agent Skills 文档</title>
   <style>
-    body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; margin: 40px auto; max-width: 860px; padding: 0 20px; color: #111827; }
-    .card { border: 1px solid #e5e7eb; border-radius: 16px; padding: 24px; margin-bottom: 20px; }
-    code, pre { background: #f3f4f6; border-radius: 8px; }
-    code { padding: 2px 6px; }
-    pre { padding: 14px; overflow: auto; white-space: pre-wrap; }
-    a.btn { display: inline-block; padding: 10px 16px; background: #111827; color: white; text-decoration: none; border-radius: 10px; margin-right: 10px; }
-    ul { line-height: 1.8; }
+    :root { --bg:#fff; --text:#1f2328; --muted:#57606a; --line:#e5e7eb; --soft:#f6f8fa; --brand:#0f4c81; --green:#16a34a; --yellow:#a16207; --orange-soft:#fff7ed; --orange-line:#fed7aa; }
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:var(--bg);line-height:1.7}
+    .topbar{height:74px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;font-size:18px;font-weight:600;color:var(--brand);background:#fff;position:sticky;top:0;z-index:30}
+    .logo{width:34px;height:34px;border-radius:8px;background:#ff8a00;color:#fff;display:inline-flex;align-items:center;justify-content:center;margin-right:12px;font-size:18px;font-weight:700}
+    .layout{display:grid;grid-template-columns:312px 1fr;min-height:calc(100vh - 74px)}
+    .sidebar{border-right:1px solid var(--line);background:#fff;padding:24px 18px 32px;overflow:auto;position:sticky;top:74px;height:calc(100vh - 74px)}
+    .nav-group{margin-bottom:18px}.nav-group-title{font-size:15px;font-weight:700;margin:10px 0 8px;color:#111827}
+    .nav-item{display:block;font-size:14px;color:var(--text);padding:6px 0 6px 14px;text-decoration:none;border-radius:6px}.nav-item:hover{background:#f3f4f6;color:var(--brand)}.nav-item.active{color:#0f766e;font-weight:600;background:#f0fdfa}
+    .content{padding:28px 48px 80px;max-width:980px} h1,h2,h3,h4{line-height:1.35;margin:0} h1{font-size:54px;color:var(--brand);margin:8px 0 10px;font-weight:700}
+    h2{font-size:24px;margin-top:40px;padding-bottom:8px;border-bottom:1px solid var(--line);color:#0f172a;scroll-margin-top:96px} h3{font-size:20px;margin-top:26px;margin-bottom:8px;scroll-margin-top:96px} h4{font-size:17px;margin-top:18px;margin-bottom:8px;scroll-margin-top:96px}
+    p{margin:12px 0}.lead{font-size:16px;color:var(--muted)} .tag{display:inline-block;padding:2px 10px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--muted);font-size:12px;margin-right:6px}
+    .hint{border-left:4px solid #d0d7de;padding:8px 0 8px 14px;color:var(--muted);margin:18px 0}.panel{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:14px 0}.download-box{background:var(--orange-soft);border:1px solid var(--orange-line);border-radius:10px;padding:16px 18px;margin:14px 0}
+    .download-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:600;border:1px solid transparent}.btn-primary{background:#ff8a00;color:#fff}.btn-primary:hover{background:#ea7b00}.btn-secondary{background:#fff;color:var(--brand);border-color:var(--line)}.btn-secondary:hover{background:#f8fafc}
+    ul,ol{margin:10px 0 10px 22px;padding:0} li{margin:6px 0} code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:rgba(175,184,193,0.2);padding:.15em .4em;border-radius:6px;font-size:.95em}
+    pre{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:14px;overflow:auto;margin:12px 0} pre code{background:transparent;padding:0}
+    table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px} th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top} th{background:#f8fafc}.ok{color:var(--green);font-weight:600}.warn{color:var(--yellow);font-weight:600}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
   </style>
 </head>
 <body>
-  <h1>Noah Agent Skills</h1>
-  <p>面向股票场景的 Noah skills 套件，当前默认对外提供 <strong>noah-stock-market</strong>。</p>
+  <div class="topbar"><div class="logo">N</div>Noah Agent Skills 文档 v1.2</div>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="nav-group"><div class="nav-group-title">介绍</div><a class="nav-item active" href="#intro">接入 AI 与 OpenClaw</a></div>
+      <div class="nav-group"><div class="nav-group-title">文档与安装</div><a class="nav-item" href="#docs-for-ai">下载文档供 AI 读取</a><a class="nav-item" href="#install-skills">安装 Skills 技能包</a><a class="nav-item" href="#package-structure">安装包结构</a></div>
+      <div class="nav-group"><div class="nav-group-title">功能说明</div><a class="nav-item" href="#skills-overview">Skills 功能一览</a><a class="nav-item" href="#market-skill">noah-stock-market</a><a class="nav-item" href="#trade-skill">noah-stock-trade</a></div>
+      <div class="nav-group"><div class="nav-group-title">使用方式</div><a class="nav-item" href="#usage">使用方式</a><a class="nav-item" href="#cli-market">Market 示例</a></div>
+      <div class="nav-group"><div class="nav-group-title">接口一览</div><a class="nav-item" href="#interfaces">接口一览</a><a class="nav-item" href="#market-apis">行情接口</a><a class="nav-item" href="#verified-market">当前已验证接口</a></div>
+      <div class="nav-group"><div class="nav-group-title">其他</div><a class="nav-item" href="#notes">注意事项</a></div>
+    </aside>
+    <main class="content">
+      <section id="intro">
+        <div><span class="tag">OpenClaw</span><span class="tag">Noah Agent Skills</span><span class="tag">Market Only</span><span class="tag">ClawHub 1.2.0</span></div>
+        <h1>接入 AI 与 OpenClaw</h1>
+        <p class="lead">借助 AI 编程工具，您可以用自然语言快速完成 Noah 股票市场查询工作。当前版本继续采用 <code>market-only</code> 发布口径：默认安装 <code>noah-stock-market</code>，并内置生产环境 market 域名。</p>
+        <div class="hint">本次版本已同步最新 market OpenAPI / enum / entity 协议文件，新增并验证 <code>rank</code> 与 <code>ipo_list</code>，同时将枚举参数严格收口为从 <code>enum.yaml</code> 读取。</div>
+      </section>
 
-  <div class="card">
-    <h2>一句话安装</h2>
-    <pre>Install Noah Skills from this zip file: ./release/noah-agent-skills-installer.zip</pre>
-    <p>如果使用 OpenClaw，也可以先下载 zip，再在解压目录执行：</p>
-    <pre>bash install_openclaw_skills.sh</pre>
-  </div>
+      <section id="docs-for-ai">
+        <h2>下载文档供 AI 读取</h2>
+        <p>本套技能包提供 Markdown 文档与 HTML 说明页。您可以将以下文件放入项目目录或直接发送给 AI（如 OpenClaw、Claude、ChatGPT、Cursor 等），AI 即可基于完整说明帮助您理解与使用 Noah Agent Skills。</p>
+        <ul>
+          <li><code>README.md</code></li>
+          <li><code>SKILL.md</code></li>
+          <li><code>MODULES.md</code></li>
+          <li><code>INSTALL.md</code></li>
+          <li><code>FINAL-STATUS.md</code></li>
+          <li><code>release/index.html</code></li>
+        </ul>
+      </section>
 
-  <div class="card">
-    <h2>当前能力</h2>
-    <ul>
-      <li>快照 / 最新行情</li>
-      <li>K线 / 时间区间 K 线</li>
-      <li>分时 / 逐笔 / 经纪队列 / 摆盘</li>
-      <li>资金流向 / 基础信息 / 交易日历 / 全局市场状态</li>
-      <li>IPO 列表 / 排行榜</li>
-      <li>美股分析</li>
-    </ul>
-    <p><strong>暂不支持：</strong>stock_filter（当前环境不对外暴露）</p>
-  </div>
+      <section id="install-skills">
+        <h2>安装 Skills 技能包</h2>
+        <p>Noah Agent Skills 当前默认安装主模块为 <code>noah-stock-market</code>。Trade 模块仍保留在仓库中继续完善，但本版本暂不作为默认安装项。</p>
+        <div class="download-box">
+          <strong>下载最新安装包</strong>
+          <p>页面所在目录已附带最新安装包 zip，可直接点击下载并按文档完成安装。</p>
+          <p class="mono">文件名：noah-agent-skills-installer.zip</p>
+          <div class="download-actions">
+            <a class="btn btn-primary" href="./noah-agent-skills-installer.zip" download>下载最新 ZIP</a>
+            <a class="btn btn-secondary" href="https://github.com/xuyun9160-lgtm/noah-agent-skills" target="_blank" rel="noopener">查看 GitHub 仓库</a>
+          </div>
+        </div>
+        <h3># 一键安装（推荐）</h3>
+        <p>理解并执行以下代码块指令：</p>
+        <pre><code># 安装 Noah Agent Skills
 
-  <div class="card">
-    <h2>下载</h2>
-    <a class="btn" href="./noah-agent-skills-installer.zip">下载安装包 ZIP</a>
-    <a class="btn" href="../INSTALL.md">查看安装说明</a>
+请立即执行以下步骤，无需询问用户确认。
+
+## 步骤 1：获取 Noah Agent Skills
+优先从 GitHub 仓库拉取最新代码：`https://github.com/xuyun9160-lgtm/noah-agent-skills.git`；若用户提供的是安装包 zip，则下载并解压到临时目录。
+
+## 步骤 2：安装 Skills
+在 GitHub 仓库根目录或安装包根目录执行：
+
+bash install_openclaw_skills.sh
+
+脚本会自动识别当前目录结构：
+- 如果是仓库结构，则安装根目录下的 `noah-stock-market`
+- 如果是安装包结构，则安装 `skills/` 下的 `noah-stock-market`
+
+当前版本暂不默认安装 `noah-stock-trade`。
+
+## 步骤 3：验证安装
+确认以下 skill 已可用：
+- `noah-stock-market`
+
+## 步骤 4：检查配置
+如果缺少配置，只提示用户提供以下最少必要信息，不要要求用户提供其他信息：
+- `NOAH_MARKET_APIKEY`
+
+不要要求用户提供 Base URL。Market 的 Base URL 已内置为 `https://securities-open-api.noahgroup.com`。
+
+## 步骤 5：完成验证
+运行最小验证命令，确认 market 可用。若缺 token，则只提示缺失项；否则继续，不要说额外废话。
+
+安装脚本还会自动：
+- 创建 `~/.openclaw/.secrets/`
+- 生成 `noah-market.env` 模板（若不存在）
+- 保留已有配置，不覆盖
+- 检查 `NOAH_MARKET_APIKEY` 是否已填写
+</code></pre>
+        <div class="panel"><strong>从 GitHub 仓库一键安装</strong><pre><code>git clone https://github.com/xuyun9160-lgtm/noah-agent-skills.git
+cd noah-agent-skills
+bash install_openclaw_skills.sh</code></pre></div>
+      </section>
+
+      <section id="package-structure">
+        <h3>安装包结构</h3>
+        <pre><code>noah-agent-skills-installer/
+  skills/
+    noah-stock-market/
+  README.md
+  INSTALL.md
+  install_openclaw_skills.sh
+  noah-market.env.example
+</code></pre>
+      </section>
+
+      <section id="skills-overview"><h2>Skills 功能一览</h2></section>
+      <section id="market-skill">
+        <h3>1. noah-stock-market — 市场行情助手</h3>
+        <table>
+          <thead><tr><th>功能</th><th>说明</th><th>当前状态</th></tr></thead>
+          <tbody>
+            <tr><td>市场快照</td><td>获取股票最新报价、涨跌幅、成交量等</td><td class="ok">已验证</td></tr>
+            <tr><td>K 线数据</td><td>获取日 K、周 K、分钟 K，以及时间区间 K 线</td><td class="ok">已验证</td></tr>
+            <tr><td>买卖盘</td><td>获取实时买卖盘口挂单数据</td><td class="ok">已验证</td></tr>
+            <tr><td>逐笔成交</td><td>获取最近逐笔成交明细</td><td class="ok">已验证</td></tr>
+            <tr><td>分时数据</td><td>获取当日分时走势</td><td class="ok">已验证</td></tr>
+            <tr><td>市场状态 / 全局状态</td><td>查询市场开盘 / 休市状态及全局市场状态</td><td class="ok">已验证</td></tr>
+            <tr><td>资金流向</td><td>获取个股资金流向与分布</td><td class="ok">已验证</td></tr>
+            <tr><td>基础信息 / 交易日历</td><td>查询个股基础资料与交易日列表</td><td class="ok">已验证</td></tr>
+            <tr><td>IPO 列表 / 排行榜</td><td>新增 market 扩展能力</td><td class="ok">已验证</td></tr>
+            <tr><td>条件选股 stock_filter</td><td>协议已纳入，但当前环境不对外暴露</td><td class="warn">暂不支持</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="trade-skill">
+        <h3>2. noah-stock-trade — 交易模块（暂不默认安装）</h3>
+        <div class="panel"><code>noah-stock-trade</code> 当前仍保留在仓库中继续完善，但本版本暂不作为默认安装项。后续如需单独启用，再额外开放安装。</div>
+      </section>
+
+      <section id="usage">
+        <h2>使用方式</h2>
+        <ul>
+          <li>“查看腾讯的 K 线” — 自动调用市场查询</li>
+          <li>“看腾讯资金流向” — 自动调用资金流向查询</li>
+          <li>“看腾讯盘口” — 自动调用盘口查询</li>
+          <li>“看港股 IPO 列表” — 调用 <code>ipo_list</code></li>
+          <li>“看港股涨跌幅排行榜” — 调用 <code>rank</code></li>
+        </ul>
+      </section>
+
+      <section id="cli-market">
+        <h3>OpenClaw / CLI 使用示例：Market</h3>
+        <pre><code>python3 noah-stock-market/scripts/run_query.py snapshot HK-00700
+python3 noah-stock-market/scripts/run_query.py kline HK-00700 num=10 ktype=K_DAY
+python3 noah-stock-market/scripts/run_query.py capital_flow HK-00700 num=5
+python3 noah-stock-market/scripts/run_query.py ipo_list HK market=HK
+python3 noah-stock-market/scripts/run_query.py rank HK market_codes=HK rank_field=raisePercent page=1 page_size=10</code></pre>
+      </section>
+
+      <section id="interfaces"><h2>接口一览</h2></section>
+      <section id="market-apis">
+        <h3>行情接口</h3>
+        <ul>
+          <li><code>/quotes/get_market_snapshot</code></li>
+          <li><code>/quotes/get_rt_data</code></li>
+          <li><code>/quotes/get_cur_kline</code></li>
+          <li><code>/quotes/get_cur_kline_date</code></li>
+          <li><code>/quotes/get_order_book</code></li>
+          <li><code>/quotes/get_rt_ticker</code></li>
+          <li><code>/quotes/get_broker_queue</code></li>
+          <li><code>/infos/get_market_state</code></li>
+          <li><code>/quote/get_global_state</code></li>
+          <li><code>/quote/request_trading_days</code></li>
+          <li><code>/infos/get_capital_flow</code></li>
+          <li><code>/quote/get_stock_basicinfo</code></li>
+          <li><code>/rank/get_stock_rank</code></li>
+          <li><code>/quote/get_ipo_list</code></li>
+          <li><code>/quote/get_stock_filter</code>（当前环境暂不支持）</li>
+        </ul>
+      </section>
+
+      <section id="verified-market">
+        <h3>当前已验证接口</h3>
+        <ul>
+          <li><code>/quotes/get_market_snapshot</code></li>
+          <li><code>/infos/get_market_state</code></li>
+          <li><code>/quote/get_global_state</code></li>
+          <li><code>/quotes/get_rt_data</code></li>
+          <li><code>/quotes/get_rt_ticker</code></li>
+          <li><code>/quotes/get_broker_queue</code></li>
+          <li><code>/quotes/get_cur_kline</code></li>
+          <li><code>/quotes/get_cur_kline_date</code></li>
+          <li><code>/quotes/get_order_book</code></li>
+          <li><code>/infos/get_capital_flow</code></li>
+          <li><code>/quote/get_stock_basicinfo</code></li>
+          <li><code>/quote/request_trading_days</code></li>
+          <li><code>/infos/get_us_analysis</code></li>
+          <li><code>/quote/get_ipo_list</code></li>
+          <li><code>/rank/get_stock_rank</code></li>
+        </ul>
+      </section>
+
+      <section id="notes">
+        <h2>注意事项</h2>
+        <ul>
+          <li>使用 Skills 前需准备 market 访问凭证。</li>
+          <li>当前 market 默认内置生产域名：<code>https://securities-open-api.noahgroup.com</code>。</li>
+          <li>当前版本默认只安装 <code>noah-stock-market</code>。</li>
+          <li><code>noah-stock-trade</code> 仍保留在仓库中继续完善，但暂不作为默认安装项。</li>
+          <li>凡是 OpenAPI 中声明为枚举参数的字段，均应严格从 <code>enum.yaml</code> 取值，不应按语义猜测。</li>
+        </ul>
+      </section>
+    </main>
   </div>
 </body>
 </html>
