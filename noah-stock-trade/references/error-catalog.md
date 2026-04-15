@@ -4,7 +4,7 @@
 ### Typical User-facing Message
 - 交易模块必要配置缺失
 - 未配置 `NOAH_TRADE_API_BASE_URL`
-- 未配置 `NOAH_TRADE_GROUP_NO`
+- 未配置 `NOAH_MARKET_APIKEY`
 
 ### Typical Cause
 - 本地环境变量未配置

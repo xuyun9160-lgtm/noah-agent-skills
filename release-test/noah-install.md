@@ -18,7 +18,7 @@ By installing Noah Skills, you can query HK/US market data directly inside AI co
 
 ## Feature Overview
 
-Current Noah Skills focus on **Market Query + Trade Query Skills**.
+Current Noah Skills focus on **Search / Market Query Skills**.
 
 | Capability | Description | Example |
 |------------|-------------|---------|
@@ -35,8 +35,8 @@ Current Noah Skills focus on **Market Query + Trade Query Skills**.
 | US Analysis | Query analyst / target-price style info | `Show AAPL analyst view` |
 
 > The installer installs all skills under the corresponding directory inside the package.
-> In the current package, the included skills are `noah-stock-market` and `noah-stock-trade`.
-> Market supports finance HK/US and shareholder query capabilities; trade supports account, positions, assets, orders, deals, fee details, stock amount, max buy amount, fee estimate, and push-data query.
+> In the current package, the included market skill is `noah-stock-market`.
+> Finance HK/US and shareholder endpoints are present in the latest spec, but are still pending formal integration.
 
 ---
 
@@ -44,7 +44,7 @@ Current Noah Skills focus on **Market Query + Trade Query Skills**.
 
 Download the installation package, extract it, and copy Noah Skills into your target client directory.
 
-**[Download noah-agent-skills-installer.zip](https://securities-open-api.noahgroup.com/noah-agent-skills-installer.zip)**
+**[Download noah-agent-skills-installer.zip](https://securities-open-api.t2.test.noahgrouptest.com/noah-agent-skills-installer.zip)**
 
 After downloading, extract and copy:
 
@@ -93,7 +93,7 @@ Choose the setup method for your AI client. This main install document supports 
 Download the ZIP package:
 
 ```text
-https://securities-open-api.noahgroup.com/noah-agent-skills-installer.zip
+https://securities-open-api.t2.test.noahgrouptest.com/noah-agent-skills-installer.zip
 ```
 
 Then extract and copy all packaged skills:
@@ -194,7 +194,7 @@ If these commands return data successfully, the installation is ready.
 ## Notes
 
 - The market Base URL is built in:
-  `https://securities-open-api.noahgroup.com`
+  `https://securities-open-api.t2.test.noahgrouptest.com`
 - Current release includes a built-in default market API key fallback for direct experience.
 - Copy all packaged skills under `search-skills/` into the target client directory.
 - In the current package, the included market skill is `noah-stock-market`.

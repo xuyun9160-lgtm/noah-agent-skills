@@ -42,7 +42,7 @@ def build_parser():
     subparsers.add_parser("account-info", help="Get account info")
 
     p_positions = subparsers.add_parser("positions", help="Get positions")
-    p_positions.add_argument("--symbol", help="Optional trade symbol, e.g. HK.00700 / HK-00700 / 00700")
+    p_positions.add_argument("--market", required=True, choices=["HK", "US", "SH", "SZ"], help="Market code")
 
     subparsers.add_parser("sec-asset", help="Get securities asset")
 
@@ -59,6 +59,7 @@ def build_parser():
     p_flow.add_argument("--unique-code")
 
     p_orders = subparsers.add_parser("today-orders", help="Get today's order list")
+    p_orders.add_argument("--market", required=True, choices=["HK", "US", "SH", "SZ"], help="Market code")
     p_orders.add_argument("--symbol", help="Optional trade symbol, e.g. HK.00700 / HK-00700 / 00700")
     p_orders.add_argument("--page", type=int, default=1, help="Page number")
     p_orders.add_argument("--page-size", type=int, default=50, help="Page size")
@@ -139,8 +140,7 @@ def main():
             return 0
 
         if command == "positions":
-            symbol = normalize_trade_symbol(args.symbol) if args.symbol else None
-            raw = portfolio.get_positions(code=symbol)
+            raw = portfolio.get_positions(market=args.market)
             data = raw.get('response', {}).get('data') or []
             summary = summarize_positions(data)
             result = {'human_summary': portfolio_text(command, summary), 'data': summary}
@@ -176,7 +176,7 @@ def main():
 
         if command == "today-orders":
             symbol = normalize_trade_symbol(args.symbol) if args.symbol else None
-            raw = client.get_today_orders(code=symbol, page=args.page, page_size=args.page_size)
+            raw = client.get_today_orders(market=args.market, code=symbol, page=args.page, page_size=args.page_size)
             result = summarize_today_orders(raw)
             print(json.dumps(success_response(command, config, result, raw), ensure_ascii=False))
             return 0

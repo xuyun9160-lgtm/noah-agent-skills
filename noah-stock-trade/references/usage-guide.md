@@ -21,13 +21,17 @@
 - 撤单
 
 ## 2. Access Prerequisites
-当前测试口径下，需要：
+当前口径下，需要：
 - `NOAH_TRADE_API_BASE_URL`
-- `NOAH_TRADE_GROUP_NO`
+- `NOAH_MARKET_APIKEY`
 
-当前交易侧测试前提：
+其中：
+- `NOAH_MARKET_APIKEY` 为 market / trade 共用通用 token
+- token 不内置，需由用户安装后自行配置
+
+当前交易侧接入前提：
 - Base URL：`https://stock-open-api.t2.test.noahgrouptest.com`
-- Header：`groupNo: 100636524`
+- Header：`Authorization: Bearer <token>`
 
 ## 3. Suitable Query Scenarios
 适合的场景包括：
@@ -48,20 +52,25 @@
 ### 账户 / 持仓 / 资产
 ```bash
 python3 scripts/noah_trade_cli.py account-info
-python3 scripts/noah_trade_cli.py positions
-python3 scripts/noah_trade_cli.py positions --symbol HK.00700
+python3 scripts/noah_trade_cli.py positions --market HK
+python3 scripts/noah_trade_cli.py positions --market US
 python3 scripts/noah_trade_cli.py sec-asset
 python3 scripts/noah_trade_cli.py sec-capital-flow --start-date 20260401 --end-date 20260413
 ```
 
 ### 订单 / 成交 / 费用 / 可交易能力
 ```bash
+python3 scripts/noah_trade_cli.py today-orders --market HK --page 1 --page-size 20
 python3 scripts/noah_trade_cli.py unfinished-orders
 python3 scripts/noah_trade_cli.py today-deals
-python3 scripts/noah_trade_cli.py history-deals --start-date 20260401 --end-date 20260413
+python3 scripts/noah_trade_cli.py history-orders --start-date 20250401 --end-date 20260415
+python3 scripts/noah_trade_cli.py history-deals --start-date 20250401 --end-date 20260415
+python3 scripts/noah_trade_cli.py finished-orders --start-date 20250401 --end-date 20260415 --page 1 --page-size 20
+python3 scripts/noah_trade_cli.py order-detail --order-id 2025101600HK0000000001 --is-history
+python3 scripts/noah_trade_cli.py order-fee-detail --order-id 2025101600HK0000000001 --is-history
 python3 scripts/noah_trade_cli.py fee-estimate --symbol HK.00700 --side BUY --order-type LIMIT --price 320 --qty 100
 python3 scripts/noah_trade_cli.py stock-amount --symbol HK.00700 --order-type LO
-python3 scripts/noah_trade_cli.py max-enable-buy-amt --symbol HK.00700 --order-type LO
+python3 scripts/noah_trade_cli.py max-enable-buy-amt --symbol HK.00700 --order-type LO --entrust-price 320
 ```
 
 > 注意：当前 `max-enable-buy-amt` 实际联调时还需要额外价格参数，后续脚本将继续对齐到服务端要求。
@@ -88,9 +97,8 @@ python3 scripts/noah_trade_cli.py max-enable-buy-amt --symbol HK.00700 --order-t
 ## 7. Current Limitations
 当前已知限制包括：
 - 写操作接口（下单 / 改单 / 撤单）当前不对外承诺
-- `/trade/get_order_list` 与 `/trade/get_finished_order_list` 在当前测试环境中的行为与 OpenAPI 文档不一致
-- `/trade/get_order_detail` 与 `/trade/get_order_fee_detail` 当前测试环境会返回服务端 500
-- `max_enable_buy_amt` 当前服务端要求的参数比已有文档/初始理解更严格，至少需要 `entrust_price`
+- `get_positions` 与 `get_order_list` 已按新版文档切换到 `market` 必填口径，旧参数理解不再适用
+- `max_enable_buy_amt` 需要传 `entrust_price`
 
 ## 8. Relationship with Other Modules
 - 行情 / K线 / 分时 / 摆盘 → `noah-stock-market`

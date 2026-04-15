@@ -10,7 +10,7 @@ class NoahTradeClient:
         self.config = config
         self.base_url = config.base_url.rstrip('/') + '/'
         self.headers = {
-            'groupNo': config.group_no,
+            'Authorization': f'Bearer {config.token}',
             'Accept': 'application/json',
         }
 
@@ -52,7 +52,7 @@ class NoahTradeClient:
                     endpoint=endpoint,
                     biz_code=biz_code,
                     trace_id=trace_id,
-                    hint='请检查业务参数、账户状态和 groupNo 是否匹配',
+                    hint='请检查业务参数、账户状态和 Bearer token 是否匹配',
                 )
 
         return {
@@ -101,8 +101,8 @@ class NoahTradeClient:
             )
         return self._handle_response(resp, endpoint)
 
-    def get_today_orders(self, code=None, page=1, page_size=50):
-        params = {}
+    def get_today_orders(self, market, code=None, page=1, page_size=50):
+        params = {'market': market}
         if code:
             params['code'] = code
         if page is not None:

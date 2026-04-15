@@ -1,16 +1,17 @@
 # Noah Agent Skills
 
-`noah-agent-skills` 是一个面向股票场景的综合金融 skill 仓库，当前正在收敛为两个主模块：
+`noah-agent-skills` 是一个面向股票场景的综合金融 skill 仓库，当前收敛为两个主模块：
 
 - `noah-stock-market`
+- `noah-stock-trade`
 
 新版安装页与安装包产物位于：
 - `release/index.html`
 - `release/noah-agent-skills-installer.zip`
 
 其中：
-- `noah-stock-market` 负责市场数据、行情、K线、分时、逐笔、经纪队列、交易日历、全局市场状态、资金流向、美股分析、IPO 列表、排行榜等能力
-- `noah-stock-trade` 当前仍保留在仓库中继续完善，但本版本暂不作为默认安装项
+- `noah-stock-market` 负责市场数据、行情、K线、分时、逐笔、经纪队列、交易日历、全局市场状态、资金流向、美股分析、IPO 列表、排行榜、财务数据与股东增减持等能力
+- `noah-stock-trade` 负责账户、持仓、证券资产、资金流水、订单、成交、费用、可买可卖、交易前评估等能力
 
 ## 一键安装（推荐）
 
@@ -41,7 +42,7 @@ bash install_openclaw_skills.sh
 - `noah-stock-trade`
 
 ## 步骤 4：检查配置
-当前版本默认内置 market API key，可直接体验 market 能力。
+当前版本不内置 token；安装后用户需自行配置 market / trade 共用的通用 token。
 如后续需要替换为客户自有凭证，再单独覆盖 `NOAH_MARKET_APIKEY` 即可。
 
 不要要求用户提供 Base URL。Market 的 Base URL 已内置为 `https://securities-open-api.noahgroup.com`。
@@ -121,7 +122,7 @@ bash install_openclaw_skills.sh
 ## Configuration
 
 ### Market module
-当前市场服务 Base URL 已内置。本版本默认内置 market API key，安装后可直接体验 market 能力。
+当前市场服务 Base URL 已内置。本版本不内置 token；安装后用户需自行配置 market / trade 共用的通用 token。
 
 推荐配置文件位置：
 
@@ -146,8 +147,8 @@ NOAH_TRADE_GROUP_NO=100636524
 ```
 
 说明：
-- 当前交易侧通过请求头中的 `groupNo` 访问账户分组
-- 当前测试口径下暂不需要单独 token
+- 当前 trade 与 market 共用同一个通用 token
+- token 不内置，需由用户安装后自行配置
 - 如需高级配置，可再补 `NOAH_TRADE_ENV`、`NOAH_TRADE_READ_ONLY`、`NOAH_TRADE_TIMEOUT`
 
 ## Installation

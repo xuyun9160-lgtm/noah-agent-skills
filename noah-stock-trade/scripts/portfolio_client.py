@@ -8,10 +8,8 @@ class NoahPortfolioClient(NoahTradeClient):
     def get_account_info(self):
         return self._get('/trade/get_account_info', {})
 
-    def get_positions(self, code=None):
-        params = {}
-        if code:
-            params['code'] = code
+    def get_positions(self, market):
+        params = {'market': market}
         return self._get('/trade/get_positions', params)
 
     def get_sec_asset(self):
