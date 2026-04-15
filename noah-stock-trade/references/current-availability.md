@@ -27,7 +27,7 @@
 ## Access Prerequisites
 
 当前 trade 模块使用：
-- Base URL：`https://stock-open-api.t2.test.noahgrouptest.com`
+- Base URL：`https://stock-open-api.noahgroup.com`
 - Header：`Authorization: Bearer <token>`
 
 推荐本地变量名：

@@ -39,7 +39,7 @@ class TradeConfig:
 
 
 def load_trade_config() -> TradeConfig:
-    base_url = os.getenv("NOAH_TRADE_API_BASE_URL", "https://stock-open-api.t2.test.noahgrouptest.com").strip()
+    base_url = os.getenv("NOAH_TRADE_API_BASE_URL", "https://stock-open-api.noahgroup.com").strip()
     token = os.getenv("NOAH_MARKET_APIKEY", "").strip() or os.getenv("NOAH_MARKET_TOKEN", "").strip()
     env = os.getenv("NOAH_TRADE_ENV", "test").strip() or "test"
     read_only = os.getenv("NOAH_TRADE_READ_ONLY", "true").lower() != "false"

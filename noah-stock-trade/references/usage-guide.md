@@ -30,7 +30,7 @@
 - token 不内置，需由用户安装后自行配置
 
 当前交易侧接入前提：
-- Base URL：`https://stock-open-api.t2.test.noahgrouptest.com`
+- Base URL：`https://stock-open-api.noahgroup.com`
 - Header：`Authorization: Bearer <token>`
 
 ## 3. Suitable Query Scenarios
