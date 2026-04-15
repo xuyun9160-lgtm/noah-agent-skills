@@ -12,7 +12,7 @@ metadata:
 
 # Noah Skill Installation Guide
 
-By installing Noah Skills, you can query HK/US market data directly inside AI conversations, including snapshots, K-line, intraday trends, tick-by-tick trades, broker queue, capital flow, trading days, IPO lists, rank, and US analysis.
+By installing Noah Skills, you can query HK/US market data directly inside AI conversations, including snapshots, K-line, intraday trends, tick-by-tick trades, broker queue, capital flow, trading days, IPO lists, rank, US analysis, and selected wealth queries such as balance list, cash total asset, fixed income, private contract asset list, and total asset.
 
 ---
 
@@ -33,10 +33,11 @@ Current Noah Skills focus on **Market Query + Trade Query Skills**.
 | IPO List | Query IPO list | `Show HK IPO list` |
 | Rank | Query rank data | `Show HK top gainers rank` |
 | US Analysis | Query analyst / target-price style info | `Show AAPL analyst view` |
+| Wealth Queries | Query balance list, cash total asset, fixed income, private assets, and total asset | `Show my total asset summary` |
 
 > The installer installs all skills under the corresponding directory inside the package.
 > In the current package, the included skills are `noah-stock-market` and `noah-stock-trade`.
-> Market supports finance HK/US and shareholder query capabilities; trade supports account, positions, assets, orders, deals, fee details, stock amount, max buy amount, fee estimate, and push-data query.
+> Market supports finance HK/US, shareholder query, and selected wealth query capabilities; trade supports account, positions, assets, orders, deals, fee details, stock amount, max buy amount, fee estimate, and push-data query.
 
 ---
 
@@ -50,7 +51,8 @@ After downloading, extract and copy:
 
 ```bash
 unzip noah-agent-skills-installer.zip
-cd noah-agent-skills-installer
+# 解压后请进入安装包根目录
+cd ./noah-agent-skills-installer
 ```
 
 Extracted directory structure:
@@ -98,11 +100,27 @@ https://stock-info.noahgroup.com/noah-agent-skills/noah-agent-skills-installer.z
 
 Then extract and copy all packaged skills:
 
+### First-time install
+
 ```bash
 unzip noah-agent-skills-installer.zip
-cd noah-agent-skills-installer
+# 解压后请进入安装包根目录
+cd ./noah-agent-skills-installer
 mkdir -p ~/.openclaw/skills
-cp -R search-skills/* ~/.openclaw/skills/
+cp -R ./search-skills/* ~/.openclaw/skills/
+```
+
+### Update if the same skills are already installed
+
+```bash
+unzip noah-agent-skills-installer.zip
+# 解压后请进入安装包根目录
+cd ./noah-agent-skills-installer
+mkdir -p ~/.openclaw/skills
+rm -rf ~/.openclaw/skills/noah-stock-market
+rm -rf ~/.openclaw/skills/noah-stock-trade
+cp -R ./search-skills/noah-stock-market ~/.openclaw/skills/
+cp -R ./search-skills/noah-stock-trade ~/.openclaw/skills/
 ```
 
 The current release includes a built-in default market key fallback, so you can start with direct copying like Futu-style skill delivery.
@@ -121,18 +139,34 @@ cp noah-market.env.example ~/.openclaw/.secrets/noah-market.env
 
 These tools can share the `~/.claude/skills/` directory. Install once and reuse across projects.
 
+### First-time install
+
 ```bash
 mkdir -p ~/.claude/skills
-cp -R search-skills/* ~/.claude/skills/
+cp -R ./search-skills/* ~/.claude/skills/
 ```
 
 If you are installing from the ZIP package:
 
 ```bash
 unzip noah-agent-skills-installer.zip
-cd noah-agent-skills-installer
+# 解压后请进入安装包根目录
+cd ./noah-agent-skills-installer
 mkdir -p ~/.claude/skills
-cp -R search-skills/* ~/.claude/skills/
+cp -R ./search-skills/* ~/.claude/skills/
+```
+
+### Update if the same skills are already installed
+
+```bash
+unzip noah-agent-skills-installer.zip
+# 解压后请进入安装包根目录
+cd ./noah-agent-skills-installer
+mkdir -p ~/.claude/skills
+rm -rf ~/.claude/skills/noah-stock-market
+rm -rf ~/.claude/skills/noah-stock-trade
+cp -R ./search-skills/noah-stock-market ~/.claude/skills/
+cp -R ./search-skills/noah-stock-trade ~/.claude/skills/
 ```
 
 Because the current release includes a built-in default market key fallback, these clients can work even when they do not execute the OpenClaw installer script.
@@ -148,16 +182,17 @@ Copy packaged rule-capable skill instructions into the Cursor rules directory.
 
 ```bash
 mkdir -p ~/.cursor/rules
-find search-skills -mindepth 1 -maxdepth 1 -type d -exec sh -c 'for d; do name=$(basename "$d"); cp "$d/SKILL.md" "$HOME/.cursor/rules/$name.md"; done' sh {} +
+find ./search-skills -mindepth 1 -maxdepth 1 -type d -exec sh -c 'for d; do name=$(basename "$d"); cp "$d/SKILL.md" "$HOME/.cursor/rules/$name.md"; done' sh {} +
 ```
 
 If you are installing from the ZIP package:
 
 ```bash
 unzip noah-agent-skills-installer.zip
-cd noah-agent-skills-installer
+# 解压后请进入安装包根目录
+cd ./noah-agent-skills-installer
 mkdir -p ~/.cursor/rules
-find search-skills -mindepth 1 -maxdepth 1 -type d -exec sh -c 'for d; do name=$(basename "$d"); cp "$d/SKILL.md" "$HOME/.cursor/rules/$name.md"; done' sh {} +
+find ./search-skills -mindepth 1 -maxdepth 1 -type d -exec sh -c 'for d; do name=$(basename "$d"); cp "$d/SKILL.md" "$HOME/.cursor/rules/$name.md"; done' sh {} +
 ```
 
 The current release includes a built-in default market key fallback, so Cursor built-in AI can still use market queries without running the installer script first.

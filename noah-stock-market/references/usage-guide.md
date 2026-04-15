@@ -31,6 +31,9 @@
 python3 scripts/run_query.py snapshot HK-00700
 python3 scripts/run_query.py kline HK-00700 num=10 ktype=K_DAY
 python3 scripts/run_query.py capital_flow HK-00700 num=5
+python3 scripts/run_query.py wealth_balance_list HK
+python3 scripts/run_query.py wealth_total_asset HK toCurrency=HKD
+python3 scripts/run_query.py wealth_fixed_income HK productTypeList=NOTE,DEPOSIT_COM toCcy=HKD showTotalAsset=true
 ```
 
 ### 2. 自然语言入口
@@ -59,6 +62,13 @@ python3 scripts/route_query.py 看腾讯盘口
 - 摆盘
 - 资金流向
 - 基础信息
+
+当前已完成脚本接入、待统一联调验证的新场景：
+- 余额列表
+- 总资产
+- 现金类资产
+- 固收资产
+- 私募资产
 
 ## Caution
 

@@ -42,10 +42,11 @@ NOAH_API_BASE_URL=https://securities-open-api.noahgroup.com
 - 交易日历
 - 个股资金流向
 - 股票基础信息
-- IPO 列表 / 排行榜
+- IPO 列表 / 排行榜 / 条件选股
 - 美股分析（US analysis）
 - 港美股财务数据
 - 股东增减持榜单
+- 财富类查询：余额、总资产、现金类资产、固收资产、私募资产、银行定存详情
 
 不支持：
 - 下单 / 撤单 / 改单
@@ -104,6 +105,11 @@ NOAH_API_BASE_URL=https://securities-open-api.noahgroup.com
 - `financial_us`
 - `shareholder_inc_red_hold`
 - `shareholder_inc_red_hold_by_ucode`
+- `wealth_balance_list`
+- `wealth_cash_total_asset`
+- `wealth_fixed_income`
+- `wealth_private_contract_asset_list`
+- `wealth_total_asset`
 
 示例：
 
@@ -126,6 +132,11 @@ python3 scripts/run_query.py financial_hk HK-00700 type_code=DT4 year=2024
 python3 scripts/run_query.py financial_us US-AAPL type_code=DT4 year=2024
 python3 scripts/run_query.py shareholder_inc_red_hold HK market=HK shareholder=EVENT_DATE order_code=DESCEND page=1 page_size=10
 python3 scripts/run_query.py shareholder_inc_red_hold_by_ucode HK-00700 shareholder=EVENT_DATE order_code=DESCEND page=1 page_size=10
+python3 scripts/run_query.py wealth_balance_list HK
+python3 scripts/run_query.py wealth_cash_total_asset HK
+python3 scripts/run_query.py wealth_fixed_income HK productTypeList=NOTE,DEPOSIT_COM toCcy=HKD showTotalAsset=true
+python3 scripts/run_query.py wealth_private_contract_asset_list HK toCurrency=HKD queryType=ALL positionStatus=HOLDING isPaging=true
+python3 scripts/run_query.py wealth_total_asset HK toCurrency=HKD
 ```
 
 如果脚本返回 `ok=false`，先直接向用户说明失败原因，不要编造数据。
@@ -176,6 +187,7 @@ python3 scripts/run_query.py shareholder_inc_red_hold_by_ucode HK-00700 sharehol
   - 美股分析
   - 港美股财务数据
   - 股东增减持信息
+    - 财富类查询（余额、总资产、固收、私募、现金、银行定存详情）
 
   你可以直接用自然语言提问，比如：
   - 看一下腾讯现在的股价
