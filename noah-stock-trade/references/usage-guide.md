@@ -100,6 +100,7 @@ python3 scripts/noah_trade_cli.py max-enable-buy-amt --symbol HK.00700 --order-t
 - 写操作接口（下单 / 改单 / 撤单）当前不对外承诺
 - `get_positions` 与 `get_order_list` 已按新版文档切换到 `market` 必填口径，旧参数理解不再适用
 - `max_enable_buy_amt` 需要传 `entrust_price`
+- 多币种资产展示时不得直接跨币种加总；如无汇率依据，应按币种分别展示
 
 ## 8. Relationship with Other Modules
 - 行情 / K线 / 分时 / 摆盘 → `noah-stock-market`

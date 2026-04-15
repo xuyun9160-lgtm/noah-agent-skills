@@ -142,6 +142,10 @@ def summarize_order_fee_detail(raw):
     }
 
 
+def multi_currency_asset_note() -> str:
+    return "涉及多种计价货币时，不直接跨币种加总；默认按币种分别展示，未做汇率换算。"
+
+
 def summarize_max_enable_buy_amt(raw, symbol, order_type):
     data = raw.get("response", {})
     return {

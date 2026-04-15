@@ -44,7 +44,7 @@ Current Noah Skills focus on **Market Query + Trade Query Skills**.
 
 Download the installation package, extract it, and copy Noah Skills into your target client directory.
 
-**[Download noah-agent-skills-installer.zip](https://securities-open-api.noahgroup.com/noah-agent-skills-installer.zip)**
+**[Download noah-agent-skills-installer.zip](https://stock-info.noahgroup.com/noah-agent-skills/noah-agent-skills-installer.zip)**
 
 After downloading, extract and copy:
 
@@ -93,7 +93,7 @@ Choose the setup method for your AI client. This main install document supports 
 Download the ZIP package:
 
 ```text
-https://securities-open-api.noahgroup.com/noah-agent-skills-installer.zip
+https://stock-info.noahgroup.com/noah-agent-skills/noah-agent-skills-installer.zip
 ```
 
 Then extract and copy all packaged skills:

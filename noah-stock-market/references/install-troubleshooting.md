@@ -21,7 +21,7 @@
 示例：
 
 ```bash
-NOAH_API_BASE_URL=https://securities-open-api.t2.test.noahgrouptest.com
+NOAH_API_BASE_URL=https://securities-open-api.noahgroup.com
 NOAH_MARKET_APIKEY=your_api_key_here
 ```
 

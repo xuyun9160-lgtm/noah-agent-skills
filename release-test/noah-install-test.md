@@ -44,19 +44,19 @@ Current Noah Skills focus on **Search / Market Query Skills**.
 
 Download the installation package, extract it, and copy Noah Skills into your target client directory.
 
-**[Download noah-agent-skills-installer.zip](https://securities-open-api.t2.test.noahgrouptest.com/noah-agent-skills-installer.zip)**
+**[Download noah-agent-skills-installer-test.zip](https://securities-open-api.t2.test.noahgrouptest.com/noah-agent-skills-installer-test.zip)**
 
 After downloading, extract and copy:
 
 ```bash
-unzip noah-agent-skills-installer.zip
-cd noah-agent-skills-installer
+unzip noah-agent-skills-installer-test.zip
+cd noah-agent-skills-installer-test
 ```
 
 Extracted directory structure:
 
 ```text
-noah-agent-skills-installer/
+noah-agent-skills-installer-test/
 +-- search-skills/
 |   +-- noah-stock-market/
 +-- release/
@@ -93,14 +93,14 @@ Choose the setup method for your AI client. This main install document supports 
 Download the ZIP package:
 
 ```text
-https://securities-open-api.t2.test.noahgrouptest.com/noah-agent-skills-installer.zip
+https://securities-open-api.t2.test.noahgrouptest.com/noah-agent-skills-installer-test.zip
 ```
 
 Then extract and copy all packaged skills:
 
 ```bash
-unzip noah-agent-skills-installer.zip
-cd noah-agent-skills-installer
+unzip noah-agent-skills-installer-test.zip
+cd noah-agent-skills-installer-test
 mkdir -p ~/.openclaw/skills
 cp -R search-skills/* ~/.openclaw/skills/
 ```
@@ -129,8 +129,8 @@ cp -R search-skills/* ~/.claude/skills/
 If you are installing from the ZIP package:
 
 ```bash
-unzip noah-agent-skills-installer.zip
-cd noah-agent-skills-installer
+unzip noah-agent-skills-installer-test.zip
+cd noah-agent-skills-installer-test
 mkdir -p ~/.claude/skills
 cp -R search-skills/* ~/.claude/skills/
 ```
@@ -154,8 +154,8 @@ find search-skills -mindepth 1 -maxdepth 1 -type d -exec sh -c 'for d; do name=$
 If you are installing from the ZIP package:
 
 ```bash
-unzip noah-agent-skills-installer.zip
-cd noah-agent-skills-installer
+unzip noah-agent-skills-installer-test.zip
+cd noah-agent-skills-installer-test
 mkdir -p ~/.cursor/rules
 find search-skills -mindepth 1 -maxdepth 1 -type d -exec sh -c 'for d; do name=$(basename "$d"); cp "$d/SKILL.md" "$HOME/.cursor/rules/$name.md"; done' sh {} +
 ```
