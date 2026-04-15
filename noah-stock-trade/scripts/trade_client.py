@@ -117,6 +117,30 @@ class NoahTradeClient:
             params['code'] = code
         return self._get('/trade/get_today_deal_list', params)
 
+
+    def get_history_orders(self, code=None, start_date=None, end_date=None, order_id=None, order_no=None, order_status=None):
+        params = {}
+        if code:
+            params['code'] = code
+        if start_date:
+            params['start_date'] = start_date
+        if end_date:
+            params['end_date'] = end_date
+        if order_id:
+            params['order_id'] = order_id
+        if order_no:
+            params['order_no'] = order_no
+        if order_status:
+            params['order_status'] = order_status
+        return self._get('/trade/get_history_order_list', params)
+
+    def query_push_data(self, init_date, begin_serial_no, end_serial_no):
+        payload = {
+            'init_date': init_date,
+            'begin_serial_no': str(begin_serial_no),
+            'end_serial_no': str(end_serial_no),
+        }
+        return self._post('/trade/query_push_data', payload)
     def get_history_deals(self, code=None, start_date=None, end_date=None):
         params = {}
         if code:

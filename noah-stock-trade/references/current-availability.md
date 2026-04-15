@@ -14,12 +14,12 @@
 | History Deal List | Scripted / Verified | 已联调成功；需 `start_date` + `end_date` |
 | Today Unfinished Order List | Scripted / Verified | 对应 `/trade/get_today_order_list`，已联调成功 |
 | Today Order List | Scripted / Verified | 已按最新文档口径验证；当前使用 `market` 必填 |
-| History Order List | Scripted / Verified | 已联调成功 |
+| History Order List | Scripted / Verified | 已联调成功；当前按最新文档需传 `start_date` + `end_date` |
 | Finished Order List | Scripted / Verified | 已联调成功 |
 | Order Detail | Scripted / Verified | 已用真实 `order_id` 联调成功 |
 | Order Fee Detail | Scripted / Verified | 已用真实 `order_id` 联调成功 |
 | Order Fee Query | Scripted / Verified | 已联调成功；需 POST + JSON body |
-| Push Data Query | Scripted / Verified | 当前按最新口径视为已打通 |
+| Push Data Query | Scripted / Verified | 当前按最新文档需传 `init_date` + `begin_serial_no` + `end_serial_no` |
 | Place Order | Deferred / Not enabled | 当前阶段不对外承诺写操作 |
 | Modify Order | Deferred / Not enabled | 当前阶段不对外承诺写操作 |
 | Cancel Order | Deferred / Not enabled | 当前阶段不对外承诺写操作 |

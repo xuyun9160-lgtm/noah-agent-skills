@@ -66,6 +66,7 @@ python3 scripts/noah_trade_cli.py today-deals
 python3 scripts/noah_trade_cli.py history-orders --start-date 20250401 --end-date 20260415
 python3 scripts/noah_trade_cli.py history-deals --start-date 20250401 --end-date 20260415
 python3 scripts/noah_trade_cli.py finished-orders --start-date 20250401 --end-date 20260415 --page 1 --page-size 20
+python3 scripts/noah_trade_cli.py query-push-data --init-date 20260415 --begin-serial-no 1 --end-serial-no 100
 python3 scripts/noah_trade_cli.py order-detail --order-id 2025101600HK0000000001 --is-history
 python3 scripts/noah_trade_cli.py order-fee-detail --order-id 2025101600HK0000000001 --is-history
 python3 scripts/noah_trade_cli.py fee-estimate --symbol HK.00700 --side BUY --order-type LIMIT --price 320 --qty 100

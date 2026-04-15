@@ -67,6 +67,14 @@ def build_parser():
     p_deals = subparsers.add_parser("today-deals", help="Get today's deal list")
     p_deals.add_argument("--symbol", help="Optional trade symbol, e.g. HK.00700 / HK-00700 / 00700")
 
+    p_hist_orders = subparsers.add_parser("history-orders", help="Get history order list")
+    p_hist_orders.add_argument("--symbol", help="Optional trade symbol")
+    p_hist_orders.add_argument("--start-date", required=True, help="Start date, yyyyMMdd")
+    p_hist_orders.add_argument("--end-date", required=True, help="End date, yyyyMMdd")
+    p_hist_orders.add_argument("--order-id")
+    p_hist_orders.add_argument("--order-no")
+    p_hist_orders.add_argument("--order-status")
+
     p_hist_deals = subparsers.add_parser("history-deals", help="Get history deal list")
     p_hist_deals.add_argument("--symbol", help="Optional trade symbol")
     p_hist_deals.add_argument("--start-date", required=True, help="Start date, yyyyMMdd")
@@ -101,6 +109,11 @@ def build_parser():
     p_fee.add_argument("--order-type", required=True, choices=["LIMIT", "MARKET"], help="Order type")
     p_fee.add_argument("--price", type=float, help="Order price; usually required for LIMIT")
     p_fee.add_argument("--qty", required=True, type=float, help="Order quantity")
+
+    p_push = subparsers.add_parser("query-push-data", help="Query push data")
+    p_push.add_argument("--init-date", required=True, help="Init date, yyyyMMdd")
+    p_push.add_argument("--begin-serial-no", required=True)
+    p_push.add_argument("--end-serial-no", required=True)
 
     p_fee_detail = subparsers.add_parser("order-fee-detail", help="Get order fee detail")
     p_fee_detail.add_argument("--order-id", required=True)
@@ -188,6 +201,13 @@ def main():
             print(json.dumps(success_response(command, config, result, raw), ensure_ascii=False))
             return 0
 
+        if command == "history-orders":
+            symbol = normalize_trade_symbol(args.symbol) if getattr(args, "symbol", None) else None
+            raw = client.get_history_orders(code=symbol, start_date=args.start_date, end_date=args.end_date, order_id=args.order_id, order_no=args.order_no, order_status=args.order_status)
+            result = summarize_today_orders(raw)
+            print(json.dumps(success_response(command, config, result, raw), ensure_ascii=False))
+            return 0
+
         if command == "history-deals":
             symbol = normalize_trade_symbol(args.symbol) if args.symbol else None
             raw = client.get_history_deals(code=symbol, start_date=args.start_date, end_date=args.end_date)
@@ -237,6 +257,11 @@ def main():
             )
             result = summarize_fee_estimate(raw, symbol=symbol, side=args.side, price=args.price, qty=args.qty)
             print(json.dumps(success_response(command, config, result, raw), ensure_ascii=False))
+            return 0
+
+        if command == "query-push-data":
+            raw = client.query_push_data(init_date=args.init_date, begin_serial_no=args.begin_serial_no, end_serial_no=args.end_serial_no)
+            print(json.dumps(success_response(command, config, {"raw": raw.get("response", {}).get("data")}, raw), ensure_ascii=False))
             return 0
 
         if command == "order-fee-detail":
