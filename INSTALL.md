@@ -82,6 +82,20 @@ bash install_openclaw_skills.sh
 - 如果是仓库结构，则安装根目录下的 `noah-stock-market` 与 `noah-stock-trade`
 - 如果是安装包结构，则安装安装包内对应目录下的全部 skill
 
+### 更新已有 skill（推荐）
+为避免旧版本残留文件混入新版本，更新时推荐：先删除旧的同名 skill 目录，再复制新的 skill 目录。
+
+```bash
+rm -rf ~/.openclaw/skills/noah-stock-market
+rm -rf ~/.openclaw/skills/noah-stock-trade
+cp -R search-skills/noah-stock-market ~/.openclaw/skills/
+cp -R search-skills/noah-stock-trade ~/.openclaw/skills/
+```
+
+说明：
+- 更新时只覆盖 skill 目录
+- 不删除、不覆盖用户已有的 `.secrets` 配置
+
 脚本还会自动：
 - 创建 `~/.openclaw/.secrets/`
 - 生成 `noah-market.env` 模板（若不存在）

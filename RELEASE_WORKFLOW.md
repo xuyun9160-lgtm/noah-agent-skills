@@ -315,6 +315,8 @@ cd noah-agent-skills-installer-test
 - `~/.openclaw/skills/noah-stock-market`
 - `~/.openclaw/skills/noah-stock-trade`
 
+同步建议采用“先删旧目录，再复制新目录”的方式，避免旧版本残留文件混入新版本。
+
 同步后必须至少执行：
 - `python3 -m py_compile ...`
 - 一个最小验证命令
@@ -322,6 +324,7 @@ cd noah-agent-skills-installer-test
 避免出现：
 - 仓库最新版已改
 - 全局 skill 仍然是旧版本
+- 新文件已覆盖，但旧版本已删除文件仍残留在本地目录中
 
 ---
 

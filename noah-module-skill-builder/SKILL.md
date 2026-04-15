@@ -232,6 +232,11 @@ When requested, perform:
 If the user wants immediate local usability, sync to:
 - `~/.openclaw/skills/...`
 
+When updating an existing installed skill, prefer:
+- delete old same-name skill directories first
+- then copy the new skill directories in
+- do not delete or overwrite user `.secrets` files during skill updates
+
 Then run:
 - `python3 -m py_compile ...`
 - a minimal runtime check if possible
