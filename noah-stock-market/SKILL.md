@@ -43,8 +43,6 @@ NOAH_API_BASE_URL=https://securities-open-api.noahgroup.com
 - 股票基础信息
 - IPO 列表 / 排行榜
 - 美股分析（US analysis）
-
-当前接口已存在但环境未完全验证或暂不支持：
 - 港美股财务数据
 - 股东增减持榜单
 
@@ -101,6 +99,10 @@ NOAH_API_BASE_URL=https://securities-open-api.noahgroup.com
 - `us_analysis`
 - `rank`
 - `ipo_list`
+- `financial_hk`
+- `financial_us`
+- `shareholder_inc_red_hold`
+- `shareholder_inc_red_hold_by_ucode`
 
 示例：
 
@@ -119,6 +121,10 @@ python3 scripts/run_query.py trading_days HK-00700 start=20260401 end=20260430
 python3 scripts/run_query.py us_analysis US-AAPL
 python3 scripts/run_query.py rank HK market_codes=HK rank_field=raisePercent page=1 page_size=10
 python3 scripts/run_query.py ipo_list HK market=HK
+python3 scripts/run_query.py financial_hk HK-00700 type_code=DT4 year=2024
+python3 scripts/run_query.py financial_us US-AAPL type_code=DT4 year=2024
+python3 scripts/run_query.py shareholder_inc_red_hold HK market=HK shareholder=EVENT_DATE order_code=DESCEND page=1 page_size=10
+python3 scripts/run_query.py shareholder_inc_red_hold_by_ucode HK-00700 shareholder=EVENT_DATE order_code=DESCEND page=1 page_size=10
 ```
 
 如果脚本返回 `ok=false`，先直接向用户说明失败原因，不要编造数据。

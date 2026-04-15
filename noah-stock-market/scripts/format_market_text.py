@@ -286,6 +286,46 @@ def format_ipo_list(summary: Dict[str, Any]) -> str:
     return '\n'.join(lines)
 
 
+def format_financial(summary: Dict[str, Any]) -> str:
+    market = summary.get('market')
+    if market == 'HK':
+        return '\n'.join([
+            '港股财务数据：',
+            f'报告期：{_safe(summary.get("report_end"))}',
+            f'基本每股收益：{_num(summary.get("eps"))}',
+            f'每股净资产：{_num(summary.get("bps"))}',
+            f'ROE（加权）：{_num(summary.get("roe"))}',
+            f'毛利率：{_num(summary.get("gross_margin"))}%',
+            f'净利率：{_num(summary.get("net_margin"))}%',
+            f'资产负债率：{_num(summary.get("debt_ratio"))}%',
+            f'营业收入同比：{_num(summary.get("revenue_growth_yoy"))}%',
+            f'净利润同比：{_num(summary.get("net_profit_growth_yoy"))}%',
+        ])
+    return '\n'.join([
+        '美股财务数据：',
+        f'报告期：{_safe(summary.get("report_end"))}',
+        f'币种：{_safe(summary.get("currency"))}',
+        f'基本每股收益：{_num(summary.get("eps"))}',
+        f'每股净资产：{_num(summary.get("bps"))}',
+        f'每股经营现金流：{_num(summary.get("operating_cashflow_per_share"))}',
+        f'每股营业收入：{_num(summary.get("operating_income_per_share"))}',
+        f'每股股息：{_num(summary.get("dividend_per_share"))}',
+        f'基本每股收益同比：{_num(summary.get("yoy_growth_in_basic_eps"))}%',
+    ])
+
+
+def format_shareholder_inc_red_hold(summary: Dict[str, Any]) -> str:
+    items = summary.get('items') or []
+    if not items:
+        return '暂无股东增减持数据'
+    lines = [f'股东增减持：共返回 {summary.get("count") or 0} 条']
+    for i, x in enumerate(items[:10], 1):
+        lines.append(
+            f'{i}）{x.get("holder_name") or "-"}｜{x.get("sec_name") or "-"}（{x.get("symbol") or "-"}）｜日期{x.get("event_date") or "-"}｜变动股数{_num(x.get("shares_traded"))}｜变动金额{_num(x.get("changed_amount"))}'
+        )
+    return '\n'.join(lines)
+
+
 def format_stock_filter(summary: Dict[str, Any]) -> str:
     items = summary.get('items') or []
     if not items:

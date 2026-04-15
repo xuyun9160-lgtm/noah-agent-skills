@@ -14,8 +14,8 @@
 | HK / US Ambiguity Clarification | Ready | 已支持阿里巴巴、百度、京东、哔哩哔哩、蔚来、小鹏、理想等双市场名称澄清 |
 | IPO List | Ready | 已验证 `/quote/get_ipo_list` 可用 |
 | Rank | Ready | 已按 `references/enum.yaml#/QuoteSortField` 严格取枚举值验证通过 |
-| Finance HK / US | Partial | 文档中存在接口，当前尚未纳入正式对外能力 |
-| Shareholder Inc/Red Hold | Partial | 文档中存在接口，当前尚未纳入正式对外能力 |
+| Finance HK / US | Ready | 已验证 `/infos/get_finance_hk_infos` 与 `/infos/get_finance_us_infos` 可用；调用时需使用 `DateTypeConvertUtil` 的 `x-enum-varnames`（如 `DT4`） |
+| Shareholder Inc/Red Hold | Ready | 已验证 `/infos/shareholder_inc_red_hold` 与 `/infos/shareholder_inc_red_hold_by_ucode` 可用；调用时需使用 `ShareholderRedHoldEnum` 的 `x-enum-varnames`（如 `EVENT_DATE`） |
 
 ## Notes
 

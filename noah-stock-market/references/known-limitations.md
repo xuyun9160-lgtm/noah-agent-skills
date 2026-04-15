@@ -19,16 +19,8 @@
 - `/rank/get_stock_rank`
 
 ## 当前环境暂不支持或未验证通过
-- `/infos/get_finance_hk_infos`
-  - 最新文档存在，但当前尚未完成正式接入与验证
-
-- `/infos/get_finance_us_infos`
-  - 最新文档存在，但当前尚未完成正式接入与验证
-
-- `/infos/shareholder_inc_red_hold`
 - `/infos/shareholder_inc_red_hold_by_date`
-- `/infos/shareholder_inc_red_hold_by_ucode`
-  - 最新文档存在，但当前尚未完成正式接入与验证
+  - 当前主脚本尚未接入按时间范围查询入口；按市场与按股票两条主路径已验证可用
 
 - 美股 K 线（如 `US-AAPL`, `US-NVDA`）
   - 自然语言路由已能正确识别为 `kline`

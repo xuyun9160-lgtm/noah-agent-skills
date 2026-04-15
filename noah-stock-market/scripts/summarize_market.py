@@ -418,6 +418,62 @@ def summarize_ipo_list(items: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
+def summarize_financial(summary: Dict[str, Any], market: str) -> Dict[str, Any]:
+    if market == 'HK':
+        indicators = (summary or {}).get('hkStockFinancialIndicatorResp') or []
+        latest = indicators[0] if indicators else {}
+        return {
+            'market': 'HK',
+            'latest': latest,
+            'eps': latest.get('basicEps'),
+            'bps': latest.get('netAssetPs'),
+            'roe': latest.get('roeWeighted'),
+            'gross_margin': latest.get('grossIncomeRatio'),
+            'net_margin': latest.get('netProfitRatio'),
+            'debt_ratio': latest.get('debtAssetsRatio'),
+            'revenue_growth_yoy': latest.get('operatingRevenueGr1y'),
+            'net_profit_growth_yoy': latest.get('netProfitGr1y'),
+            'report_end': latest.get('endDate') or latest.get('fiscalYear'),
+            'raw': summary,
+        }
+    main = (summary or {}).get('usMainFinancialInfoResp') or {}
+    return {
+        'market': 'US',
+        'latest': main,
+        'eps': main.get('epsBasic') or main.get('eps'),
+        'bps': main.get('netAssetValuePerShare'),
+        'operating_cashflow_per_share': main.get('netOperatingCashFlowPerShare'),
+        'operating_income_per_share': main.get('operatingIncomePerShare'),
+        'dividend_per_share': main.get('dividendPerShare'),
+        'yoy_growth_in_basic_eps': main.get('yoyGrowthInBasicEps'),
+        'report_end': main.get('endDate'),
+        'currency': main.get('reportingCurrency') or main.get('priceCurrency'),
+        'raw': summary,
+    }
+
+
+def summarize_shareholder_inc_red_hold(items: List[Dict[str, Any]]) -> Dict[str, Any]:
+    normalized = []
+    for x in items:
+        normalized.append({
+            'holder_name': x.get('name'),
+            'event_date': x.get('transDate'),
+            'shares_traded': x.get('adjSharesTraded'),
+            'changed_amount': x.get('changedAmount'),
+            'hold_before': x.get('holdSumBefEvent'),
+            'hold_after': x.get('holdSumAfEvent'),
+            'quantity_ratio': x.get('variableQuantityRatio'),
+            'symbol': normalize_symbol(x.get('uniqueCode')),
+            'sec_name': x.get('secName'),
+            'exchange_code': x.get('exgCode'),
+            'raw': x,
+        })
+    return {
+        'count': len(normalized),
+        'items': normalized[:20],
+    }
+
+
 def summarize_stock_filter(items: List[Dict[str, Any]]) -> Dict[str, Any]:
     normalized = []
     for x in items:

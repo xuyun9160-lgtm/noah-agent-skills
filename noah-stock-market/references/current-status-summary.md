@@ -18,15 +18,14 @@
 
 ## Verified One-Phase Capabilities
 
-- 港股：快照、市场状态、全局市场状态、分时、逐笔、经纪队列、K线、时间区间 K 线、资金流向、基础信息、交易日历、IPO 列表、排行榜
-- 美股：分析接口 `us_analysis` 已验证可用
+- 港股：快照、市场状态、全局市场状态、分时、逐笔、经纪队列、K线、时间区间 K 线、资金流向、基础信息、交易日历、IPO 列表、排行榜、财务数据、股东增减持
+- 美股：分析接口 `us_analysis` 已验证可用；财务数据已验证可用
 - 自然语言问法：腾讯相关主路径已基本可用
-- 枚举协议：已将 `openapi.yaml / enum.yaml / entity.yaml` 沉淀到 skill references，并开始按 enum 严格取值
+- 枚举协议：已将 `openapi.yaml / enum.yaml / entity.yaml` 沉淀到 skill references，并开始按 enum 严格取值；财务与股东增减持场景已确认需取 `x-enum-varnames`
 
 ## Not Yet Ready For Phase-1 Promise
 
-- 港美股财务数据（文档已更新，尚未正式接入）
-- 股东增减持榜单（文档已更新，尚未正式接入）
+- 股东增减持按时间范围查询（`shareholder_inc_red_hold_by_date`）尚未接入主脚本
 - 美股 K 线（当前环境仍需继续确认）
 
 ## Recommended Next Step

@@ -5,16 +5,18 @@ from typing import Any, Dict
 
 from quote_client import NoahQuoteClient
 from normalize_symbol import normalize_symbol
-from protocol_enums import ensure_enum, normalize_sort_dir
+from protocol_enums import ensure_enum, ensure_enum_varname, normalize_sort_dir
 from summarize_market import (
     summarize_basicinfo,
     summarize_broker_queue,
     summarize_capital_flow,
+    summarize_financial,
     summarize_intraday,
     summarize_ipo_list,
     summarize_kline,
     summarize_market_state,
     summarize_rank,
+    summarize_shareholder_inc_red_hold,
     summarize_snapshot,
     summarize_ticker,
     summarize_trading_days,
@@ -24,11 +26,13 @@ from format_market_text import (
     format_basicinfo,
     format_broker_queue,
     format_capital_flow,
+    format_financial,
     format_intraday,
     format_ipo_list,
     format_kline,
     format_market_state,
     format_rank,
+    format_shareholder_inc_red_hold,
     format_snapshot,
     format_ticker,
     format_trading_days,
@@ -93,6 +97,34 @@ def build_params(intent: str, symbol: str, **kwargs) -> Dict[str, Any]:
         return {
             'market': ensure_enum('Market', kwargs.get('market') or symbol),
         }
+    if intent == 'financial_hk':
+        return {
+            'stock_code': symbol,
+            'type_code': ensure_enum_varname('DateTypeConvertUtil', kwargs.get('type_code', 'DT4')),
+            'year': int(kwargs.get('year')),
+        }
+    if intent == 'financial_us':
+        return {
+            'stock_code': symbol,
+            'type_code': ensure_enum_varname('DateTypeConvertUtil', kwargs.get('type_code', 'DT4')),
+            'year': int(kwargs.get('year')),
+        }
+    if intent == 'shareholder_inc_red_hold':
+        return {
+            'current_page': int(kwargs.get('current_page', kwargs.get('page', 1))),
+            'page_size': int(kwargs.get('page_size', 10)),
+            'market': ensure_enum('Markets', kwargs.get('market') or symbol),
+            'shareholder': ensure_enum_varname('ShareholderRedHoldEnum', kwargs.get('shareholder', 'EVENT_DATE')),
+            'order_code': ensure_enum('SortDir', kwargs.get('order_code', 'DESCEND')),
+        }
+    if intent == 'shareholder_inc_red_hold_by_ucode':
+        return {
+            'current_page': int(kwargs.get('current_page', kwargs.get('page', 1))),
+            'page_size': int(kwargs.get('page_size', 10)),
+            'stock_code': symbol,
+            'shareholder': ensure_enum_varname('ShareholderRedHoldEnum', kwargs.get('shareholder', 'EVENT_DATE')),
+            'order_code': ensure_enum('SortDir', kwargs.get('order_code', 'DESCEND')),
+        }
     raise ValueError(f'unsupported intent: {intent}')
 
 
@@ -102,7 +134,7 @@ def run(intent: str, raw_symbol: str, **kwargs) -> Dict[str, Any]:
     else:
         symbol = normalize_symbol(raw_symbol) or raw_symbol
     client = NoahQuoteClient()
-    supported = {'snapshot', 'market_state', 'global_state', 'intraday', 'ticker', 'broker_queue', 'kline', 'capital_flow', 'basicinfo', 'trading_days', 'us_analysis', 'rank', 'ipo_list'}
+    supported = {'snapshot', 'market_state', 'global_state', 'intraday', 'ticker', 'broker_queue', 'kline', 'capital_flow', 'basicinfo', 'trading_days', 'us_analysis', 'rank', 'ipo_list', 'financial_hk', 'financial_us', 'shareholder_inc_red_hold', 'shareholder_inc_red_hold_by_ucode'}
     if intent not in supported:
         return {'ok': False, 'message': f'unsupported intent: {intent}', 'symbol': symbol}
 
@@ -120,6 +152,10 @@ def run(intent: str, raw_symbol: str, **kwargs) -> Dict[str, Any]:
         'us_analysis': '/infos/get_us_analysis',
         'rank': '/rank/get_stock_rank',
         'ipo_list': '/quote/get_ipo_list',
+        'financial_hk': '/infos/get_finance_hk_infos',
+        'financial_us': '/infos/get_finance_us_infos',
+        'shareholder_inc_red_hold': '/infos/shareholder_inc_red_hold',
+        'shareholder_inc_red_hold_by_ucode': '/infos/shareholder_inc_red_hold_by_ucode',
     }
 
     params = build_params(intent, symbol, **kwargs)
@@ -201,6 +237,18 @@ def run(intent: str, raw_symbol: str, **kwargs) -> Dict[str, Any]:
         summary = summarize_ipo_list(data)
         out['summary'] = summary
         out['text'] = format_ipo_list(summary)
+    elif intent == 'financial_hk' and isinstance(data, dict):
+        summary = summarize_financial(data, market='HK')
+        out['summary'] = summary
+        out['text'] = format_financial(summary)
+    elif intent == 'financial_us' and isinstance(data, dict):
+        summary = summarize_financial(data, market='US')
+        out['summary'] = summary
+        out['text'] = format_financial(summary)
+    elif intent in ('shareholder_inc_red_hold', 'shareholder_inc_red_hold_by_ucode') and isinstance(data, list):
+        summary = summarize_shareholder_inc_red_hold(data)
+        out['summary'] = summary
+        out['text'] = format_shareholder_inc_red_hold(summary)
     else:
         out['text'] = '查询成功，但当前没有可展示的数据。'
     return out
