@@ -79,6 +79,10 @@ NOAH_API_BASE_URL=https://securities-open-api.noahgroup.com
 - 仅当用户明确要求“明细”“完整逐笔”时，才展开更多原始字段。
 - 排行榜、IPO 列表属于扩展能力；只有当用户明确问到时才使用。
 
+- 对 `wealth_total_asset` 与 `wealth_private_contract_asset_list`：
+  - 如果用户明确给出币种，则按用户指定币种查询
+  - 如果用户未给出币种，则默认按 `USD` 查询
+
 ## Recommended Script Entry
 
 优先通过 `scripts/run_query.py` 调用已验证能力：

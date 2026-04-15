@@ -155,7 +155,7 @@ def build_params(intent: str, symbol: str, **kwargs) -> Dict[str, Any]:
         return payload
     if intent == 'wealth_private_contract_asset_list':
         payload = {
-            'toCurrency': kwargs.get('toCurrency') or kwargs.get('to_currency'),
+            'toCurrency': kwargs.get('toCurrency') or kwargs.get('to_currency') or 'USD',
             'queryType': kwargs.get('queryType') or kwargs.get('query_type'),
             'isPaging': str(kwargs.get('isPaging', kwargs.get('is_paging', 'true'))).lower() in ('1','true','yes','y'),
         }
@@ -164,7 +164,7 @@ def build_params(intent: str, symbol: str, **kwargs) -> Dict[str, Any]:
             payload['positionStatus'] = [x.strip() for x in raw_status.split(',') if x.strip()]
         return payload
     if intent == 'wealth_total_asset':
-        return {'toCurrency': kwargs.get('toCurrency') or kwargs.get('to_currency')}
+        return {'toCurrency': kwargs.get('toCurrency') or kwargs.get('to_currency') or 'USD'}
     raise ValueError(f'unsupported intent: {intent}')
 
 
